@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        library_version = '0.0.1'
+        library_version = '0.0.3'
         compose_version = '1.2.0-rc02'
     }
 }
