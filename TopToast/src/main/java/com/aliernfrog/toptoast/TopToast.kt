@@ -66,7 +66,7 @@ fun TopToastBase(
 ) {
     Box(Modifier.fillMaxSize().background(backgroundColor)) {
         content()
-        AnimatedVisibility(manager.isShowing.value, enter = slideInVertically(), exit = slideOutVertically()) {
+        AnimatedVisibility(manager.isShowing.value, enter = slideInVertically(initialOffsetY = { fullHeight -> -fullHeight }), exit = slideOutVertically(targetOffsetY = { fullHeight -> -fullHeight })) {
             TopToast(manager)
         }
     }
