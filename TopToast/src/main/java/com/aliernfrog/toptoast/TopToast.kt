@@ -32,18 +32,58 @@ object TopToastColorType {
     const val PRIMARY = 1
 }
 
+/**
+ * Manages TopToast
+ */
 class TopToastManager {
+    /**
+     * If any toast is being shown
+     */
     var isShowing = mutableStateOf(false)
+
+    /**
+     * Current toast text
+     */
     var text = mutableStateOf("")
+
+    /**
+     * Current painter of toast's icon
+     */
     var icon: Painter? = null
+
+    /**
+     * Current drawable ID of toast's icon
+     */
     var iconId: Int? = null
+
+    /**
+     * Current background color of toast
+     */
     var iconBackground: Color = Color.Transparent
+
+    /**
+     * Current [color type][TopToastColorType] of toast
+     */
     var iconBackgroundType: Int? = null
+
+    /**
+     * Current Unit to invoke on click
+     */
     var onClick: (() -> Unit)? = null
 
     private val timer = Timer()
     private var task: TimerTask? = null
 
+    /**
+     * Shows a [TopToast]
+     * @param textString Text shown in toast
+     * @param iconPainter Painter of icon in toast
+     * @param iconDrawableId Drawable ID of icon in toast
+     * @param iconBackgroundColor Color shown behind icon in toast
+     * @param iconBackgroundColorType [Color type][TopToastColorType] shown behind icon in toast
+     * @param stayMs Duration of toast in milliseconds
+     * @param onToastClick Unit to invoke on toast click
+     */
     fun showToast(
         textString: String,
         iconPainter: Painter? = null,
@@ -66,6 +106,12 @@ class TopToastManager {
     }
 }
 
+/**
+ * Where [TopToast]s will be shown
+ * @param content Content shown behind toasts
+ * @param backgroundColor Background color of this [TopToastBase]
+ * @param manager [Manager ][TopToastManager] of this [TopToastBase]
+ */
 @Composable
 fun TopToastBase(
     content: @Composable () -> Unit,
@@ -80,6 +126,10 @@ fun TopToastBase(
     }
 }
 
+/**
+ * Top toast
+ * @param manager [Manager ][TopToastManager] of this [TopToast]
+ */
 @Composable
 fun TopToast(manager: TopToastManager) {
     var modifier = Modifier.clip(RoundedCornerShape(50.dp)).background(MaterialTheme.colors.background)
@@ -103,7 +153,7 @@ fun TopToast(manager: TopToastManager) {
 }
 
 @Composable
-fun iconBackgroundColor(manager: TopToastManager): Color {
+private fun iconBackgroundColor(manager: TopToastManager): Color {
     return when (manager.iconBackgroundType) {
         TopToastColorType.ERROR -> MaterialTheme.colors.error
         TopToastColorType.PRIMARY -> MaterialTheme.colors.primary
