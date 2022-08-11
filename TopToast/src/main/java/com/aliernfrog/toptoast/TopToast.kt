@@ -32,26 +32,26 @@ class TopToastManager {
     var text = mutableStateOf("")
     var icon: Painter? = null
     var iconId: Int? = null
-    var iconBackgroundColor: Color = Color.Transparent
+    var iconBackground: Color = Color.Transparent
     var onClick: (() -> Unit)? = null
 
     private val timer = Timer()
     private var task: TimerTask? = null
 
     fun showToast(
-        textToShow: String,
-        iconToShow: Painter? = null,
-        iconIdToShow: Int? = null,
-        iconBackground: Color = Color.Transparent,
+        textString: String,
+        iconPainter: Painter? = null,
+        iconDrawableId: Int? = null,
+        iconBackgroundColor: Color = Color.Transparent,
         stayMs: Long = 3000,
         onToastClick: (() -> Unit)? = null
     ) {
         task?.cancel()
         timer.purge()
-        text.value = textToShow
-        icon = iconToShow
-        iconId = iconIdToShow
-        iconBackgroundColor = iconBackground
+        text.value = textString
+        icon = iconPainter
+        iconId = iconDrawableId
+        iconBackground = iconBackgroundColor
         onClick = onToastClick
         isShowing.value = true
         task = timer.schedule(stayMs) { isShowing.value = false }
@@ -81,7 +81,7 @@ fun TopToast(manager: TopToastManager) {
             if (manager.icon != null || manager.iconId != null) Image(
                 painter = if (manager.icon != null) manager.icon!! else painterResource(manager.iconId!!),
                 contentDescription = manager.text.value,
-                Modifier.padding(end = 8.dp).size(25.dp).clip(CircleShape).background(manager.iconBackgroundColor).padding(5.dp).align(Alignment.CenterVertically)
+                Modifier.padding(end = 8.dp).size(25.dp).clip(CircleShape).background(manager.iconBackground).padding(5.dp).align(Alignment.CenterVertically)
             )
             Text(
                 manager.text.value,
