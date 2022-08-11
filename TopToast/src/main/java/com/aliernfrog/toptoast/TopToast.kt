@@ -27,12 +27,18 @@ import androidx.compose.ui.unit.sp
 import java.util.*
 import kotlin.concurrent.schedule
 
+object TopToastColorType {
+    const val ERROR = 0
+    const val PRIMARY = 1
+}
+
 class TopToastManager {
     var isShowing = mutableStateOf(false)
     var text = mutableStateOf("")
     var icon: Painter? = null
     var iconId: Int? = null
     var iconBackground: Color = Color.Transparent
+    var iconBackgroundType: Int? = null
     var onClick: (() -> Unit)? = null
 
     private val timer = Timer()
@@ -43,6 +49,7 @@ class TopToastManager {
         iconPainter: Painter? = null,
         iconDrawableId: Int? = null,
         iconBackgroundColor: Color = Color.Transparent,
+        iconBackgroundColorType: Int? = null,
         stayMs: Long = 3000,
         onToastClick: (() -> Unit)? = null
     ) {
@@ -52,6 +59,7 @@ class TopToastManager {
         icon = iconPainter
         iconId = iconDrawableId
         iconBackground = iconBackgroundColor
+        iconBackgroundType = iconBackgroundColorType
         onClick = onToastClick
         isShowing.value = true
         task = timer.schedule(stayMs) { isShowing.value = false }
@@ -81,7 +89,7 @@ fun TopToast(manager: TopToastManager) {
             if (manager.icon != null || manager.iconId != null) Image(
                 painter = if (manager.icon != null) manager.icon!! else painterResource(manager.iconId!!),
                 contentDescription = manager.text.value,
-                Modifier.padding(end = 8.dp).size(25.dp).clip(CircleShape).background(manager.iconBackground).padding(5.dp).align(Alignment.CenterVertically)
+                Modifier.padding(end = 8.dp).size(25.dp).clip(CircleShape).background(iconBackgroundColor(manager)).padding(5.dp).align(Alignment.CenterVertically)
             )
             Text(
                 manager.text.value,
@@ -91,5 +99,14 @@ fun TopToast(manager: TopToastManager) {
                 modifier = Modifier.align(Alignment.CenterVertically)
             )
         }
+    }
+}
+
+@Composable
+fun iconBackgroundColor(manager: TopToastManager): Color {
+    return when (manager.iconBackgroundType) {
+        TopToastColorType.ERROR -> MaterialTheme.colors.error
+        TopToastColorType.PRIMARY -> MaterialTheme.colors.primary
+        else -> manager.iconBackground
     }
 }

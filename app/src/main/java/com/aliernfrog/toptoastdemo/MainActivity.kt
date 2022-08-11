@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.aliernfrog.toptoast.TopToastBase
+import com.aliernfrog.toptoast.TopToastColorType
 import com.aliernfrog.toptoast.TopToastManager
 import com.aliernfrog.toptoastdemo.ui.theme.TopToastComposeTheme
 
@@ -43,6 +44,12 @@ class MainActivity : ComponentActivity() {
         Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()), horizontalAlignment = Alignment.CenterHorizontally) {
             Spacer(Modifier.height(100.dp))
             Button(content = { Text("Normal toast") }, onClick = { topToastManager.showToast("This is a normal toast") })
+            Button(content = { Text("Toast with icon") }, onClick = {
+                topToastManager.showToast("This is a toast with icon",
+                    iconDrawableId = R.drawable.check_white,
+                    iconBackgroundColorType = TopToastColorType.PRIMARY
+                )
+            })
             Button(content = { Text("Clickable toast") }, onClick = {
                 topToastManager.showToast("This will close the app when clicked", onToastClick = {
                     (context as Activity).finish()
