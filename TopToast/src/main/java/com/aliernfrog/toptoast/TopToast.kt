@@ -132,10 +132,10 @@ fun TopToastBase(
  */
 @Composable
 fun TopToast(manager: TopToastManager) {
-    var modifier = Modifier.clip(RoundedCornerShape(50.dp)).background(MaterialTheme.colors.background)
+    var modifier = Modifier.clip(RoundedCornerShape(50.dp)).background(MaterialTheme.colors.secondary)
     if (manager.onClick != null) modifier = modifier.clickable { manager.onClick?.invoke() }
     Column(Modifier.fillMaxWidth().padding(top = 24.dp).padding(horizontal = 24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        Row(modifier.border(1.dp, MaterialTheme.colors.secondary, RoundedCornerShape(50.dp)).padding(16.dp).animateContentSize()) {
+        Row(modifier.border(1.dp, MaterialTheme.colors.background, RoundedCornerShape(50.dp)).padding(16.dp).animateContentSize()) {
             if (manager.icon != null || manager.iconId != null) Image(
                 painter = if (manager.icon != null) manager.icon!! else painterResource(manager.iconId!!),
                 contentDescription = manager.text.value,
