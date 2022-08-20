@@ -143,7 +143,7 @@ fun TopToast(manager: TopToastManager) {
             )
             Text(
                 manager.text.value,
-                fontSize = 18.sp,
+                fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colors.onBackground,
                 modifier = Modifier.align(Alignment.CenterVertically)
