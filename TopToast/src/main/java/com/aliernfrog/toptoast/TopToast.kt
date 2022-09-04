@@ -54,17 +54,17 @@ class TopToastManager {
     /**
      * Current drawable ID of toast's icon
      */
-    var iconId: Int? = null
+    var iconDrawableId: Int? = null
 
     /**
      * Current background color of toast
      */
-    var iconBackground: Color = Color.Transparent
+    var iconBackgroundColor: Color = Color.Transparent
 
     /**
      * Current [color type][TopToastColorType] of toast
      */
-    var iconBackgroundType: Int? = null
+    var iconBackgroundColorType: Int? = null
 
     /**
      * Current Unit to invoke on click
@@ -76,8 +76,8 @@ class TopToastManager {
 
     /**
      * Shows a [TopToast]
-     * @param textString Text shown in toast
-     * @param iconPainter Painter of icon in toast
+     * @param text Text shown in toast
+     * @param icon Painter of icon in toast
      * @param iconDrawableId Drawable ID of icon in toast
      * @param iconBackgroundColor Color shown behind icon in toast
      * @param iconBackgroundColorType [Color type][TopToastColorType] shown behind icon in toast
@@ -85,24 +85,24 @@ class TopToastManager {
      * @param onToastClick Unit to invoke on toast click
      */
     fun showToast(
-        textString: String,
-        iconPainter: Painter? = null,
+        text: String,
+        icon: Painter? = null,
         iconDrawableId: Int? = null,
         iconBackgroundColor: Color = Color.Transparent,
         iconBackgroundColorType: Int? = null,
         stayMs: Long = 3000,
         onToastClick: (() -> Unit)? = null
     ) {
-        task?.cancel()
-        timer.purge()
-        text.value = textString
-        icon = iconPainter
-        iconId = iconDrawableId
-        iconBackground = iconBackgroundColor
-        iconBackgroundType = iconBackgroundColorType
-        onClick = onToastClick
-        isShowing.value = true
-        task = timer.schedule(stayMs) { isShowing.value = false }
+        this.task?.cancel()
+        this.timer.purge()
+        this.text.value = text
+        this.icon = icon
+        this.iconDrawableId = iconDrawableId
+        this.iconBackgroundColor = iconBackgroundColor
+        this.iconBackgroundColorType = iconBackgroundColorType
+        this.onClick = onToastClick
+        this.isShowing.value = true
+        this.task = timer.schedule(stayMs) { isShowing.value = false }
     }
 }
 
@@ -136,8 +136,8 @@ fun TopToast(manager: TopToastManager) {
     if (manager.onClick != null) modifier = modifier.clickable { manager.onClick?.invoke() }
     Column(Modifier.fillMaxWidth().padding(top = 24.dp).padding(horizontal = 24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         Row(modifier.border(1.dp, MaterialTheme.colors.background, RoundedCornerShape(50.dp)).padding(16.dp).animateContentSize()) {
-            if (manager.icon != null || manager.iconId != null) Image(
-                painter = if (manager.icon != null) manager.icon!! else painterResource(manager.iconId!!),
+            if (manager.icon != null || manager.iconDrawableId != null) Image(
+                painter = if (manager.icon != null) manager.icon!! else painterResource(manager.iconDrawableId!!),
                 contentDescription = manager.text.value,
                 Modifier.padding(end = 8.dp).size(25.dp).clip(CircleShape).background(iconBackgroundColor(manager)).padding(5.dp).align(Alignment.CenterVertically)
             )
@@ -154,9 +154,9 @@ fun TopToast(manager: TopToastManager) {
 
 @Composable
 private fun iconBackgroundColor(manager: TopToastManager): Color {
-    return when (manager.iconBackgroundType) {
+    return when (manager.iconBackgroundColorType) {
         TopToastColorType.ERROR -> MaterialTheme.colors.error
         TopToastColorType.PRIMARY -> MaterialTheme.colors.primary
-        else -> manager.iconBackground
+        else -> manager.iconBackgroundColor
     }
 }
