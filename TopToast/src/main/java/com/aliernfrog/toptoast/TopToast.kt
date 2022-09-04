@@ -1,9 +1,7 @@
 package com.aliernfrog.toptoast
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -121,7 +119,11 @@ fun TopToastBase(
 ) {
     Box(Modifier.fillMaxSize().background(backgroundColor)) {
         content()
-        AnimatedVisibility(manager.isShowing.value, enter = slideInVertically(initialOffsetY = { fullHeight -> -fullHeight }), exit = slideOutVertically(targetOffsetY = { fullHeight -> -fullHeight })) {
+        AnimatedVisibility(
+            visible = manager.isShowing.value,
+            enter = fadeIn(animationSpec = tween(durationMillis = 500)) + slideInVertically(initialOffsetY = { fullHeight -> -fullHeight }),
+            exit = fadeOut(animationSpec = tween(durationMillis = 500)) + slideOutVertically(targetOffsetY = { fullHeight -> -fullHeight }, animationSpec = tween(delayMillis = 100))
+        ) {
             TopToast(manager)
         }
     }
