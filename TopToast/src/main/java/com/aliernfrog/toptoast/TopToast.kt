@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import java.util.*
@@ -134,7 +135,7 @@ fun TopToastBase(
 fun TopToast(manager: TopToastManager) {
     var modifier = Modifier.clip(RoundedCornerShape(50.dp)).background(MaterialTheme.colors.secondary)
     if (manager.onClick != null) modifier = modifier.clickable { manager.onClick?.invoke() }
-    Column(Modifier.fillMaxWidth().padding(top = 24.dp).padding(horizontal = 24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(Modifier.fillMaxWidth().padding(top = getStatusBarHeight()+8.dp).padding(horizontal = 24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         Row(modifier.border(1.dp, MaterialTheme.colors.background, RoundedCornerShape(50.dp)).padding(16.dp).animateContentSize()) {
             if (manager.icon != null || manager.iconDrawableId != null) Image(
                 painter = if (manager.icon != null) manager.icon!! else painterResource(manager.iconDrawableId!!),
@@ -159,4 +160,9 @@ private fun iconBackgroundColor(manager: TopToastManager): Color {
         TopToastColorType.PRIMARY -> MaterialTheme.colors.primary
         else -> manager.iconBackgroundColor
     }
+}
+
+@Composable
+private fun getStatusBarHeight(): Dp {
+    return WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
 }
