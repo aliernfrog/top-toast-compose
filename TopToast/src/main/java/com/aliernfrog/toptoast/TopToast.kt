@@ -121,8 +121,8 @@ fun TopToastBase(
         content()
         AnimatedVisibility(
             visible = manager.isShowing.value,
-            enter = fadeIn(animationSpec = tween(durationMillis = 400)) + slideInVertically(initialOffsetY = { fullHeight -> -fullHeight }),
-            exit = fadeOut(animationSpec = tween(durationMillis = 400)) + slideOutVertically(targetOffsetY = { fullHeight -> -fullHeight }, animationSpec = tween(delayMillis = 100))
+            enter = slideInVertically(initialOffsetY = { fullHeight -> -fullHeight }, animationSpec = tween(durationMillis = 400)) + fadeIn(animationSpec = tween(delayMillis = 100, durationMillis = 300)),
+            exit = slideOutVertically(targetOffsetY = { fullHeight -> -fullHeight }, animationSpec = tween(durationMillis = 400)) + fadeOut(animationSpec = tween(delayMillis = 25, durationMillis = 300))
         ) {
             TopToast(manager)
         }
