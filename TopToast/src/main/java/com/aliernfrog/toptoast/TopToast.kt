@@ -4,7 +4,6 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -16,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
@@ -135,10 +135,10 @@ fun TopToastBase(
  */
 @Composable
 fun TopToast(manager: TopToastManager) {
-    var modifier = Modifier.clip(RoundedCornerShape(50.dp)).background(MaterialTheme.colors.secondary)
+    var modifier = Modifier.shadow(10.dp, RoundedCornerShape(30.dp)).clip(RoundedCornerShape(30.dp)).background(MaterialTheme.colors.secondary)
     if (manager.onClick != null) modifier = modifier.clickable { manager.onClick?.invoke() }
-    Column(Modifier.fillMaxWidth().padding(top = getStatusBarHeight()+8.dp).padding(horizontal = 24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        Row(modifier.border(1.dp, MaterialTheme.colors.background, RoundedCornerShape(50.dp)).padding(16.dp).animateContentSize()) {
+    Column(Modifier.fillMaxWidth().padding(top = getStatusBarHeight()+8.dp).padding(start = 24.dp, end = 24.dp, bottom = 10.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        Row(modifier.padding(16.dp).animateContentSize()) {
             if (manager.icon != null || manager.iconDrawableId != null) Image(
                 painter = if (manager.icon != null) manager.icon!! else painterResource(manager.iconDrawableId!!),
                 contentDescription = manager.text.value,
