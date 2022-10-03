@@ -51,7 +51,7 @@ class TopToastManager {
     var icon: Painter? = null
 
     /**
-     * Current drawable ID of toast's icon
+     * Current drawable ID of toast icon
      */
     var iconDrawableId: Int? = null
 
@@ -61,7 +61,7 @@ class TopToastManager {
     var iconTintColor: Color = Color.Transparent
 
     /**
-     * Current [color type][TopToastColorType] of toast icon's tint
+     * Current tint [color type][TopToastColorType] of toast icon
      */
     var iconTintColorType: Int? = null
 
