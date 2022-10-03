@@ -6,7 +6,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -17,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -56,14 +56,14 @@ class TopToastManager {
     var iconDrawableId: Int? = null
 
     /**
-     * Current background color of toast
+     * Current tint color of toast icon
      */
-    var iconBackgroundColor: Color = Color.Transparent
+    var iconTintColor: Color = Color.Transparent
 
     /**
-     * Current [color type][TopToastColorType] of toast
+     * Current [color type][TopToastColorType] of toast icon's tint
      */
-    var iconBackgroundColorType: Int? = null
+    var iconTintColorType: Int? = null
 
     /**
      * Current Unit to invoke on click
@@ -78,8 +78,8 @@ class TopToastManager {
      * @param text Text shown in toast
      * @param icon Painter of icon in toast
      * @param iconDrawableId Drawable ID of icon in toast
-     * @param iconBackgroundColor Color shown behind icon in toast
-     * @param iconBackgroundColorType [Color type][TopToastColorType] shown behind icon in toast
+     * @param iconTintColor Tint color of icon in toast
+     * @param iconTintColorType Tint [color type][TopToastColorType] of icon in toast
      * @param stayMs Duration of toast in milliseconds
      * @param onToastClick Unit to invoke on toast click
      */
@@ -87,8 +87,8 @@ class TopToastManager {
         text: String,
         icon: Painter? = null,
         iconDrawableId: Int? = null,
-        iconBackgroundColor: Color = Color.Transparent,
-        iconBackgroundColorType: Int? = null,
+        iconTintColor: Color = Color.Transparent,
+        iconTintColorType: Int? = null,
         stayMs: Long = 3000,
         onToastClick: (() -> Unit)? = null
     ) {
@@ -97,8 +97,8 @@ class TopToastManager {
         this.text.value = text
         this.icon = icon
         this.iconDrawableId = iconDrawableId
-        this.iconBackgroundColor = iconBackgroundColor
-        this.iconBackgroundColorType = iconBackgroundColorType
+        this.iconTintColor = iconTintColor
+        this.iconTintColorType = iconTintColorType
         this.onClick = onToastClick
         this.isShowing.value = true
         this.task = timer.schedule(stayMs) { isShowing.value = false }
@@ -142,7 +142,8 @@ fun TopToast(manager: TopToastManager) {
             if (manager.icon != null || manager.iconDrawableId != null) Image(
                 painter = if (manager.icon != null) manager.icon!! else painterResource(manager.iconDrawableId!!),
                 contentDescription = manager.text.value,
-                Modifier.padding(end = 8.dp).size(25.dp).clip(CircleShape).background(iconBackgroundColor(manager)).padding(5.dp).align(Alignment.CenterVertically)
+                colorFilter = ColorFilter.tint(iconTintColor(manager)),
+                modifier = Modifier.padding(end = 8.dp).size(25.dp).padding(3.dp).align(Alignment.CenterVertically)
             )
             Text(
                 manager.text.value,
@@ -156,11 +157,11 @@ fun TopToast(manager: TopToastManager) {
 }
 
 @Composable
-private fun iconBackgroundColor(manager: TopToastManager): Color {
-    return when (manager.iconBackgroundColorType) {
+private fun iconTintColor(manager: TopToastManager): Color {
+    return when (manager.iconTintColorType) {
         TopToastColorType.ERROR -> MaterialTheme.colors.error
         TopToastColorType.PRIMARY -> MaterialTheme.colors.primary
-        else -> manager.iconBackgroundColor
+        else -> manager.iconTintColor
     }
 }
 
