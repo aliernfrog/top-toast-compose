@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
             Button(content = { Text("Normal toast") }, onClick = { topToastManager.showToast("This is a normal toast") })
             Button(content = { Text("Toast with icon") }, onClick = {
                 topToastManager.showToast("This is a toast with icon",
-                    iconDrawableId = R.drawable.check_white,
+                    iconDrawableId = R.drawable.check,
                     iconBackgroundColorType = TopToastColorType.PRIMARY
                 )
             })
