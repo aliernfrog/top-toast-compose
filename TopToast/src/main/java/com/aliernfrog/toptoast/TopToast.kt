@@ -8,8 +8,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
@@ -136,10 +136,10 @@ fun TopToastBase(
  */
 @Composable
 fun TopToast(manager: TopToastManager) {
-    var modifier = Modifier.shadow(10.dp, RoundedCornerShape(30.dp)).clip(RoundedCornerShape(30.dp)).background(MaterialTheme.colors.secondary)
+    var modifier = Modifier.shadow(10.dp, RoundedCornerShape(30.dp)).clip(RoundedCornerShape(30.dp)).background(MaterialTheme.colorScheme.surface)
     if (manager.onClick != null) modifier = modifier.clickable { manager.onClick?.invoke() }
     Column(Modifier.fillMaxWidth().padding(top = getStatusBarHeight()+8.dp).padding(start = 24.dp, end = 24.dp, bottom = 10.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        Row(modifier.border(1.dp, MaterialTheme.colors.onBackground.copy(0.1f), RoundedCornerShape(30.dp)).padding(16.dp).animateContentSize()) {
+        Row(modifier.border(1.dp, MaterialTheme.colorScheme.onBackground.copy(0.1f), RoundedCornerShape(30.dp)).padding(16.dp).animateContentSize()) {
             if (manager.icon != null || manager.iconDrawableId != null) Image(
                 painter = if (manager.icon != null) manager.icon!! else painterResource(manager.iconDrawableId!!),
                 contentDescription = manager.text.value,
@@ -150,7 +150,7 @@ fun TopToast(manager: TopToastManager) {
                 manager.text.value,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colors.onBackground,
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.align(Alignment.CenterVertically)
             )
         }
@@ -160,8 +160,8 @@ fun TopToast(manager: TopToastManager) {
 @Composable
 private fun iconTintColor(manager: TopToastManager): Color {
     return when (manager.iconTintColorType) {
-        TopToastColorType.ERROR -> MaterialTheme.colors.error
-        TopToastColorType.PRIMARY -> MaterialTheme.colors.primary
+        TopToastColorType.ERROR -> MaterialTheme.colorScheme.error
+        TopToastColorType.PRIMARY -> MaterialTheme.colorScheme.primary
         else -> manager.iconTintColor
     }
 }

@@ -8,9 +8,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
         topToastManager = TopToastManager()
         setContent {
             TopToastComposeTheme {
-                TopToastBase(backgroundColor = MaterialTheme.colors.background, manager = topToastManager, content = {
+                TopToastBase(backgroundColor = MaterialTheme.colorScheme.background, manager = topToastManager, content = {
                     MainColumn()
                 })
             }
@@ -46,18 +46,20 @@ class MainActivity : ComponentActivity() {
         Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()), horizontalAlignment = Alignment.CenterHorizontally) {
             Box(Modifier.fillMaxWidth().height(getStatusBarHeight()).background(Color.Black))
             Spacer(Modifier.height(100.dp))
-            Button(content = { Text("Normal toast") }, onClick = { topToastManager.showToast("This is a normal toast") })
-            Button(content = { Text("Toast with icon") }, onClick = {
-                topToastManager.showToast("This is a toast with icon",
-                    iconDrawableId = R.drawable.check,
-                    iconTintColorType = TopToastColorType.PRIMARY
-                )
-            })
-            Button(content = { Text("Clickable toast") }, onClick = {
-                topToastManager.showToast("This will close the app when clicked", onToastClick = {
-                    (context as Activity).finish()
-                })
-            })
+            Column(Modifier.width(IntrinsicSize.Max)) {
+                Button(content = { Text("Normal toast") }, onClick = { topToastManager.showToast("This is a normal toast") }, modifier = Modifier.fillMaxWidth())
+                Button(content = { Text("Toast with icon") }, onClick = {
+                    topToastManager.showToast("This is a toast with icon",
+                        iconDrawableId = R.drawable.check,
+                        iconTintColorType = TopToastColorType.PRIMARY
+                    )
+                }, modifier = Modifier.fillMaxWidth())
+                Button(content = { Text("Clickable toast") }, onClick = {
+                    topToastManager.showToast("This will close the app when clicked", onToastClick = {
+                        (context as Activity).finish()
+                    })
+                }, modifier = Modifier.fillMaxWidth())
+            }
             Spacer(Modifier.height(100.dp))
         }
     }
