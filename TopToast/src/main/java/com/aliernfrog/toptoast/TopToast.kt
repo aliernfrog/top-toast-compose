@@ -111,15 +111,15 @@ class TopToastManager {
 
 /**
  * Where [TopToast]s will be shown
- * @param content Content shown behind toasts
  * @param backgroundColor Background color of this [TopToastBase]
- * @param manager [Manager ][TopToastManager] of this [TopToastBase]
+ * @param manager [TopToastManager] of this [TopToastBase]
+ * @param content Content shown behind toasts
  */
 @Composable
 fun TopToastBase(
-    content: @Composable () -> Unit,
     backgroundColor: Color = Color.Transparent,
-    manager: TopToastManager = TopToastManager()
+    manager: TopToastManager = TopToastManager(),
+    content: @Composable () -> Unit
 ) {
     Box(Modifier.fillMaxSize().background(backgroundColor)) {
         content()
