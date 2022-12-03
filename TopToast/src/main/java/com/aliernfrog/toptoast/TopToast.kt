@@ -156,7 +156,7 @@ fun TopToast(manager: TopToastManager) {
                 painter = if (manager.icon != null) manager.icon!! else if (manager.iconDrawableId != null) painterResource(manager.iconDrawableId!!) else rememberVectorPainter(manager.iconImageVector!!),
                 contentDescription = manager.text.value,
                 tint = iconTintColor(manager),
-                modifier = Modifier.padding(end = 8.dp).size(25.dp).padding(3.dp).align(Alignment.CenterVertically)
+                modifier = Modifier.padding(end = 8.dp).size(25.dp).padding(1.dp).align(Alignment.CenterVertically)
             )
             Text(
                 manager.text.value,
