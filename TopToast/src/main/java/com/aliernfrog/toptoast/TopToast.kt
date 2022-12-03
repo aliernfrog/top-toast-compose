@@ -2,7 +2,6 @@ package com.aliernfrog.toptoast
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -10,6 +9,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,8 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -50,7 +51,7 @@ class TopToastManager {
     var text = mutableStateOf("")
 
     /**
-     * Current painter of toast's icon
+     * Current [Painter] of toast icon
      */
     var icon: Painter? = null
 
@@ -58,6 +59,11 @@ class TopToastManager {
      * Current drawable ID of toast icon
      */
     var iconDrawableId: Int? = null
+
+    /**
+     * Current [ImageVector] of toast icon
+     */
+    var iconImageVector: ImageVector? = null
 
     /**
      * Current tint color of toast icon
@@ -80,8 +86,9 @@ class TopToastManager {
     /**
      * Shows a [TopToast]
      * @param text Text shown in toast
-     * @param icon Painter of icon in toast
+     * @param icon [Painter] of icon in toast
      * @param iconDrawableId Drawable ID of icon in toast
+     * @param iconImageVector [ImageVector] of icon in toast
      * @param iconTintColor Tint color of icon in toast
      * @param iconTintColorType Tint [color type][TopToastColorType] of icon in toast
      * @param stayMs Duration of toast in milliseconds
@@ -91,6 +98,7 @@ class TopToastManager {
         text: String,
         icon: Painter? = null,
         iconDrawableId: Int? = null,
+        iconImageVector: ImageVector? = null,
         iconTintColor: Color = Color.Transparent,
         iconTintColorType: Int? = null,
         stayMs: Long = 3000,
@@ -101,6 +109,7 @@ class TopToastManager {
         this.text.value = text
         this.icon = icon
         this.iconDrawableId = iconDrawableId
+        this.iconImageVector = iconImageVector
         this.iconTintColor = iconTintColor
         this.iconTintColorType = iconTintColorType
         this.onClick = onToastClick
@@ -143,10 +152,10 @@ fun TopToast(manager: TopToastManager) {
     if (manager.onClick != null) modifier = modifier.clickable(interactionSource = remember { MutableInteractionSource() }, indication = rememberRipple(color = MaterialTheme.colorScheme.onBackground), onClick = manager.onClick!!)
     Column(Modifier.fillMaxWidth().padding(top = getStatusBarHeight()+8.dp).padding(start = 24.dp, end = 24.dp, bottom = 10.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         Row(modifier.border(1.dp, MaterialTheme.colorScheme.onBackground.copy(0.1f), RoundedCornerShape(30.dp)).padding(16.dp).animateContentSize()) {
-            if (manager.icon != null || manager.iconDrawableId != null) Image(
-                painter = if (manager.icon != null) manager.icon!! else painterResource(manager.iconDrawableId!!),
+            if (manager.icon != null || manager.iconDrawableId != null || manager.iconImageVector != null) Icon(
+                painter = if (manager.icon != null) manager.icon!! else if (manager.iconDrawableId != null) painterResource(manager.iconDrawableId!!) else rememberVectorPainter(manager.iconImageVector!!),
                 contentDescription = manager.text.value,
-                colorFilter = ColorFilter.tint(iconTintColor(manager)),
+                tint = iconTintColor(manager),
                 modifier = Modifier.padding(end = 8.dp).size(25.dp).padding(3.dp).align(Alignment.CenterVertically)
             )
             Text(
