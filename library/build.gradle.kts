@@ -4,7 +4,7 @@ plugins {
     id("maven-publish")
 }
 
-val libraryVersion = "0.0.15"
+val libraryVersion = "0.0.20"
 val composeVersion = "1.4.0-alpha02"
 val composeCompilerVersion = "1.3.2"
 
