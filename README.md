@@ -6,12 +6,20 @@ Simple toast library for Jetpack Compose
 
 ## 🍞 Example usage
 ```kotlin
-val topToastManager = TopToastManager()
-TopToastBase(background = MaterialTheme.colorScheme.background, manager = topToastManager, content = {
+val topToastState = remember { TopToastState() }
+TopToastBase(
+    modifier = Modifier
+        .fillMaxSize()
+        .background(MaterialTheme.colorScheme.surface)
+) {
     Button(
         content = { Text("Click me") },
-        onClick = { topToastManager.showToast("This is a toast") }
+        onClick = { topToastState.showToast("This is a toast") }
     )
-})
+}
 ```
 Check demo app for more examples
+
+
+## TODO
++ [ ] Find a way to show toasts above dialogs
