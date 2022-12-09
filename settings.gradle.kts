@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "TopToastCompose"
-include ':library'
-include ':demo'
+include(":library")
+include(":demo")
