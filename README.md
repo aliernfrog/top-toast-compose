@@ -1,4 +1,4 @@
-# Top Toast
+# TopToast
 Simple toast library for Jetpack Compose
 
 ## [📁 JitPack](https://jitpack.io/#aliernfrog/top-toast-compose)
@@ -7,7 +7,7 @@ Simple toast library for Jetpack Compose
 ## 🍞 Example usage
 ```kotlin
 val topToastState = remember { TopToastState() }
-TopToastBase(
+TopToastHost(
     modifier = Modifier
         .fillMaxSize()
         .background(MaterialTheme.colorScheme.surface)
@@ -21,5 +21,5 @@ TopToastBase(
 Check demo app for more examples
 
 
-## TODO
+## 📋 TODO
 + [ ] Find a way to show toasts above dialogs
