@@ -65,6 +65,9 @@ class MainActivity : ComponentActivity() {
                         (context as Activity).finish()
                     })
                 }, modifier = Modifier.fillMaxWidth())
+                Button(content = { Text("1 minute toast") }, onClick = {
+                    topToastState.showToast("This will be shown for a minute", stayMs = 60000)
+                }, modifier = Modifier.fillMaxWidth())
                 Button(content = { Text("Show dialog") }, onClick = {
                     dialogShown = true
                     topToastState.showToast("Dialog shown")
