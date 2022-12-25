@@ -2,10 +2,12 @@ package com.aliernfrog.toptoast.state
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import com.aliernfrog.toptoast.component.TopToast
 import com.aliernfrog.toptoast.enum.TopToastColor
 import java.util.*
@@ -23,27 +25,17 @@ class TopToastState {
     /**
      * Current toast text
      */
-    var text = mutableStateOf("")
+    var text = mutableStateOf<Any>("")
 
     /**
      * Current [Painter] of toast icon
      */
-    var icon: Painter? = null
-
-    /**
-     * Current drawable ID of toast icon
-     */
-    var iconDrawableId: Int? = null
-
-    /**
-     * Current [ImageVector] of toast icon
-     */
-    var iconImageVector: ImageVector? = null
+    var icon: Any? = null
 
     /**
      * Current tint [color][TopToastColor] of toast icon
      */
-    var iconTintColor: TopToastColor = TopToastColor.PRIMARY
+    var iconTintColor: Any = TopToastColor.PRIMARY
 
     /**
      * Current Unit to invoke on click
@@ -55,20 +47,16 @@ class TopToastState {
 
     /**
      * Shows a [TopToast]
-     * @param text Text shown in toast
-     * @param icon [Painter] of icon in toast
-     * @param iconDrawableId Drawable ID of icon in toast
-     * @param iconImageVector [ImageVector] of icon in toast
-     * @param iconTintColor Tint color of icon in toast
+     * @param text Text shown in toast, can be a [String] or [Int] representing a string constant
+     * @param icon [Painter] of icon in toast, can be a [Painter], [ImageVector] or [Int] representing a drawable constant
+     * @param iconTintColor Tint color of icon in toast, can be a [Color] or [TopToastColor]
      * @param stayMs Duration of toast in milliseconds
      * @param onToastClick Unit to invoke on toast click
      */
     fun showToast(
-        text: String,
-        icon: Painter? = null,
-        iconDrawableId: Int? = null,
-        iconImageVector: ImageVector? = null,
-        iconTintColor: TopToastColor = TopToastColor.PRIMARY,
+        text: Any,
+        icon: Any? = null,
+        iconTintColor: Any = TopToastColor.PRIMARY,
         stayMs: Long = 3000,
         onToastClick: (() -> Unit)? = null
     ) {
@@ -76,8 +64,6 @@ class TopToastState {
         this.timer.purge()
         this.text.value = text
         this.icon = icon
-        this.iconDrawableId = iconDrawableId
-        this.iconImageVector = iconImageVector
         this.iconTintColor = iconTintColor
         this.onClick = onToastClick
         this.isShowing.value = true
@@ -85,13 +71,40 @@ class TopToastState {
     }
 
     /**
-     * Gets the [Painter] of toast icon by checking related values
+     * Resolves text of toast
      */
     @Composable
-    fun getToastIconPainter(): Painter? {
-        return if (this.icon != null) this.icon
-        else if (this.iconDrawableId != null) painterResource(this.iconDrawableId!!)
-        else if (this.iconImageVector != null) rememberVectorPainter(this.iconImageVector!!)
-        else null
+    fun resolveText(): String {
+        return when (val text = this.text.value) {
+            is String -> text
+            is Int -> stringResource(text)
+            else -> throw IllegalArgumentException()
+        }
+    }
+
+    /**
+     * Resolves icon of toast
+     */
+    @Composable
+    fun resolveIcon(): Painter? {
+        val icon = this.icon ?: return null
+        return when (icon) {
+            is Painter -> icon
+            is ImageVector -> rememberVectorPainter(icon)
+            is Int -> painterResource(icon)
+            else -> throw IllegalArgumentException()
+        }
+    }
+
+    /**
+     * Resolves icon tint color of toast
+     */
+    @Composable
+    fun resolveIconTintColor(): Color {
+        return when (val color = this.iconTintColor) {
+            is Color -> color
+            is TopToastColor -> color.getColor()
+            else -> throw IllegalArgumentException()
+        }
     }
 }

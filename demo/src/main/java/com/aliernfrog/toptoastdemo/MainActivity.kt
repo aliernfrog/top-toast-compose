@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
                 Button(content = { Text("Normal toast") }, onClick = { topToastState.showToast("This is a normal toast") }, modifier = Modifier.fillMaxWidth())
                 Button(content = { Text("Toast with icon") }, onClick = {
                     topToastState.showToast("This is a toast with icon",
-                        iconDrawableId = R.drawable.check,
+                        icon = R.drawable.check,
                         iconTintColor = TopToastColor.PRIMARY
                     )
                 }, modifier = Modifier.fillMaxWidth())
