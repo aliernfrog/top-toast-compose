@@ -37,6 +37,7 @@ fun TopToast(state: TopToastState) {
             )
             Text(
                 text = state.resolveText(),
+                lineHeight = 20.sp,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground,
