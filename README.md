@@ -1,8 +1,10 @@
 # TopToast
 Simple toast library for Jetpack Compose
+- ⚠️ 0.0.11 and higher use Material 3
+- 👀 You can try TopToast by downloading demo application from [releases](https://github.com/aliernfrog/top-toast-compose/releases)
 
 ## [📁 JitPack](https://jitpack.io/#aliernfrog/top-toast-compose)
-⚠️ 0.0.11 and higher use Material 3
+[![](https://jitpack.io/v/aliernfrog/top-toast-compose.svg)](https://jitpack.io/#aliernfrog/top-toast-compose)
 
 ## 🍞 Example usage
 ```kotlin
@@ -18,7 +20,7 @@ TopToastHost(
     )
 }
 ```
-Check demo app for more examples
+Check demo application for more examples
 
 
 ## 📋 TODO
