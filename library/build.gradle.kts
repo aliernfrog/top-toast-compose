@@ -4,9 +4,10 @@ plugins {
     id("maven-publish")
 }
 
-val libraryVersion = "1.0.0"
-val composeVersion = "1.4.0-alpha03"
-val composeCompilerVersion = "1.3.2"
+val libraryVersion: String by rootProject.extra
+val composeCompilerVersion: String by rootProject.extra
+val composeVersion: String by rootProject.extra
+val material3Version: String by rootProject.extra
 
 android {
     namespace = "com.aliernfrog.toptoast"
@@ -44,7 +45,7 @@ android {
 dependencies {
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.compose.ui:ui:$composeVersion")
-    implementation("androidx.compose.material3:material3:1.1.0-alpha04")
+    implementation("androidx.compose.material3:material3:$material3Version")
 }
 
 afterEvaluate {
