@@ -1,0 +1,40 @@
+name: Release in Releases
+
+on:
+  push:
+    tags:
+      "**.**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Build demo app with Gradle
+        run: ./gradlew assembleRelease
+
+      - name: Sign demo APK
+        id: sign_apk
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: ./app/build/outputs/apk/release/
+          signingKeyBase64: ${{ secrets.KEYSTORE_BASE64 }}
+          alias: ${{ secrets.KEYSTORE_ALIAS }}
+          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+          
+      - name: Rename signed APK
+        run: mv ${{steps.sign_apk.outputs.signedReleaseFile}} toptoast_demo.apk
+
+      - name: Create release
+        uses: marvinpinto/action-automatic-releases@v1.2.1
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          draft: false
+          prerelease: false
+          files: |
+            toptoast_demo.apk
