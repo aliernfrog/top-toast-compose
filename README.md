@@ -9,15 +9,14 @@ Simple toast library for Jetpack Compose
 ## 🍞 Example usage
 ```kotlin
 val topToastState = remember { TopToastState() }
-TopToastHost(
-    modifier = Modifier
-        .fillMaxSize()
-        .background(MaterialTheme.colorScheme.surface)
+Box(
+    modifier = Modifier.background(MaterialTheme.colorScheme.surface)
 ) {
     Button(
         content = { Text("Click me") },
         onClick = { topToastState.showToast("This is a toast") }
     )
+    TopToastHost(topToastState)
 }
 ```
 Check demo application for more examples
