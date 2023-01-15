@@ -23,8 +23,7 @@ fun TopToast(state: TopToastState) {
         modifier = Modifier
             .fillMaxWidth()
             .systemBarsPadding()
-            .padding(top = 8.dp)
-            .padding(start = 24.dp, end = 24.dp, bottom = 10.dp),
+            .padding(top = 8.dp, bottom = 10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         SwipeToDismiss(
@@ -34,7 +33,11 @@ fun TopToast(state: TopToastState) {
             }),
             background = {},
             dismissContent = {
-                Row(Modifier.toastModifier(state)) {
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = 24.dp)
+                        .toastModifier(state)
+                ) {
                     if (iconPainter != null) Icon(
                         painter = iconPainter,
                         contentDescription = null,
