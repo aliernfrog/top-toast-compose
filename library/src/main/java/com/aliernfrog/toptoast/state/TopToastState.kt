@@ -28,9 +28,9 @@ class TopToastState {
     var text = mutableStateOf<Any>("")
 
     /**
-     * Current [Painter] of toast icon
+     * Current toast icon
      */
-    var icon: Any? = null
+    var icon = mutableStateOf<Any?>(null)
 
     /**
      * Current tint [color][TopToastColor] of toast icon
@@ -63,7 +63,7 @@ class TopToastState {
         this.task?.cancel()
         this.timer.purge()
         this.text.value = text
-        this.icon = icon
+        this.icon.value = icon
         this.iconTintColor = iconTintColor
         this.onClick = onToastClick
         this.isShowing.value = true
@@ -87,7 +87,7 @@ class TopToastState {
      */
     @Composable
     fun resolveIcon(): Painter? {
-        val icon = this.icon ?: return null
+        val icon = this.icon.value ?: return null
         return when (icon) {
             is Painter -> icon
             is ImageVector -> rememberVectorPainter(icon)
