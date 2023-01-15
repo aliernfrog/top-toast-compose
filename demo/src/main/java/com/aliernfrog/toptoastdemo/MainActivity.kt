@@ -8,7 +8,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -42,7 +44,6 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun MainColumn() {
         val context = LocalContext.current
-        var dialogShown by remember { mutableStateOf(false) }
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -53,37 +54,53 @@ class MainActivity : ComponentActivity() {
             Box(Modifier.fillMaxWidth().height(getStatusBarHeight()).background(MaterialTheme.colorScheme.surfaceVariant))
             Spacer(Modifier.height(100.dp))
             Column(Modifier.width(IntrinsicSize.Max)) {
-                Button(content = { Text("Normal toast") }, onClick = { topToastState.showToast("This is a normal toast") }, modifier = Modifier.fillMaxWidth())
-                Button(content = { Text("Toast with icon") }, onClick = {
-                    topToastState.showToast("This is a toast with icon",
-                        icon = R.drawable.check,
+                DemoButton(label = "Default toast") {
+                    topToastState.showToast(
+                        text = """
+                            Toasts hide after 5 seconds by default.
+                            You can swipe to dismiss them manually
+                        """.trimIndent()
+                    )
+                }
+                DemoButton(label = "Custom timer toast") {
+                    topToastState.showToast(
+                        text = "This toast will hide after a minute, swipe to dismiss",
+                        stayMs = 60000
+                    )
+                }
+                DemoButton(label = "Success toast") {
+                    topToastState.showToast(
+                        text = "This can be shown when something succeeds",
+                        icon = Icons.Rounded.Check,
                         iconTintColor = TopToastColor.PRIMARY
                     )
-                }, modifier = Modifier.fillMaxWidth())
-                Button(content = { Text("Clickable toast") }, onClick = {
-                    topToastState.showToast("This will close the app when clicked", onToastClick = {
-                        (context as Activity).finish()
-                    })
-                }, modifier = Modifier.fillMaxWidth())
-                Button(content = { Text("1 minute toast") }, onClick = {
-                    topToastState.showToast("This will be shown for a minute", stayMs = 60000)
-                }, modifier = Modifier.fillMaxWidth())
-                Button(content = { Text("Show dialog") }, onClick = {
-                    dialogShown = true
-                    topToastState.showToast("Dialog shown")
-                }, modifier = Modifier.fillMaxWidth())
+                }
+                DemoButton(label = "Error toast") {
+                    topToastState.showToast(
+                        text = "This can be shown when something is wrong",
+                        icon = Icons.Rounded.Close,
+                        iconTintColor = TopToastColor.ERROR
+                    )
+                }
+                DemoButton(label = "Clickable toast") {
+                    topToastState.showToast(
+                        text = "This will close the app when clicked",
+                        onToastClick = {
+                            (context as Activity).finish()
+                        }
+                    )
+                }
             }
             Spacer(Modifier.height(100.dp))
         }
-        if (dialogShown) AlertDialog(
-            onDismissRequest = { dialogShown = false },
-            confirmButton = {
-                Button(onClick = { dialogShown = false }) {
-                    Text("Close")
-                }
-            },
-            title = { Text("Best dialog") },
-            text = { Text("Real explanatory") }
+    }
+
+    @Composable
+    fun DemoButton(label: String, onClick: () -> Unit) {
+        Button(
+            content = { Text(label) },
+            onClick = onClick,
+            modifier = Modifier.fillMaxWidth()
         )
     }
 
