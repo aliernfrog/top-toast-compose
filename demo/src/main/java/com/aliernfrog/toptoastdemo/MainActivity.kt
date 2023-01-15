@@ -15,11 +15,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.core.view.WindowCompat
 import com.aliernfrog.toptoast.component.TopToastHost
 import com.aliernfrog.toptoast.enum.TopToastColor
@@ -35,12 +33,8 @@ class MainActivity : ComponentActivity() {
         topToastState = TopToastState()
         setContent {
             TopToastComposeTheme {
-                TopToastHost(
-                    state = topToastState,
-                    modifier = Modifier.zIndex(10f).fillMaxSize().background(MaterialTheme.colorScheme.surface)
-                ) {
-                    MainColumn()
-                }
+                MainColumn()
+                TopToastHost(topToastState)
             }
         }
     }
@@ -49,8 +43,14 @@ class MainActivity : ComponentActivity() {
     private fun MainColumn() {
         val context = LocalContext.current
         var dialogShown by remember { mutableStateOf(false) }
-        Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()), horizontalAlignment = Alignment.CenterHorizontally) {
-            Box(Modifier.fillMaxWidth().height(getStatusBarHeight()).background(Color.Black))
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface)
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Box(Modifier.fillMaxWidth().height(getStatusBarHeight()).background(MaterialTheme.colorScheme.surfaceVariant))
             Spacer(Modifier.height(100.dp))
             Column(Modifier.width(IntrinsicSize.Max)) {
                 Button(content = { Text("Normal toast") }, onClick = { topToastState.showToast("This is a normal toast") }, modifier = Modifier.fillMaxWidth())
