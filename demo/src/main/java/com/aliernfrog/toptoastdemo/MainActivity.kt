@@ -12,9 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,6 +24,7 @@ import androidx.core.view.WindowCompat
 import com.aliernfrog.toptoast.component.TopToast
 import com.aliernfrog.toptoast.component.TopToastHost
 import com.aliernfrog.toptoast.enum.TopToastColor
+import com.aliernfrog.toptoast.enum.TopToastType
 import com.aliernfrog.toptoast.state.TopToastState
 import com.aliernfrog.toptoastdemo.ui.theme.TopToastComposeTheme
 
@@ -47,6 +46,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun MainColumn() {
         val context = LocalContext.current
+        var dialogShown by remember { mutableStateOf(false) }
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -93,6 +93,15 @@ class MainActivity : ComponentActivity() {
                         }
                     )
                 }
+                DemoButton(label = "Android type toast + dialog") {
+                    dialogShown = true
+                    topToastState.showToast(
+                        text = "This is an Android type TopToast",
+                        icon = Icons.Rounded.Info,
+                        iconTintColor = TopToastColor.ON_SURFACE,
+                        type = TopToastType.ANDROID
+                    )
+                }
             }
             Spacer(Modifier.height(100.dp))
             TopToast(
@@ -101,6 +110,18 @@ class MainActivity : ComponentActivity() {
                 iconTintColor = MaterialTheme.colorScheme.secondary
             )
         }
+        if (dialogShown) AlertDialog(
+            onDismissRequest = { dialogShown = false },
+            title = { Text("TopToast") },
+            text = {
+                Text("Android type toasts are shown above this dialog, while interactive ones (unfortunately) aren't")
+            },
+            confirmButton = {
+                OutlinedButton(onClick = { dialogShown = false }) {
+                    Text("Dismiss")
+                }
+            }
+        )
     }
 
     @Composable
