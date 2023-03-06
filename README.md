@@ -20,7 +20,3 @@ Box(
 }
 ```
 Check demo application for more examples
-
-
-## 📋 TODO
-+ [ ] Find a way to show toasts above dialogs
