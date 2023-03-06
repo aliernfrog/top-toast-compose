@@ -14,20 +14,22 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
-import com.aliernfrog.toptoast.state.TopToastState
+import com.aliernfrog.toptoast.component.TopToast
 import com.aliernfrog.toptoast.util.toastShape
 
 /**
- * Modifies the component to match [topToastState]
+ * Modifier for the [TopToast] component.
  */
-fun Modifier.toastModifier(topToastState: TopToastState): Modifier = composed {
+fun Modifier.toastModifier(
+    onClick: (() -> Unit)?
+): Modifier = composed {
     var modifier = this
         .shadow(2.dp, toastShape).clip(toastShape)
         .background(MaterialTheme.colorScheme.surface)
-    if (topToastState.onClick != null) modifier = modifier.clickable(
+    if (onClick != null) modifier = modifier.clickable(
         interactionSource = remember { MutableInteractionSource() },
         indication = rememberRipple(color = MaterialTheme.colorScheme.onBackground),
-        onClick = topToastState.onClick!!
+        onClick = onClick
     )
     modifier
         .border(
