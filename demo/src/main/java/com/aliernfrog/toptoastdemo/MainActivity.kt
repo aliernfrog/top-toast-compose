@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        topToastState = TopToastState()
+        topToastState = TopToastState(window.decorView)
         setContent {
             TopToastComposeTheme {
                 MainColumn()

@@ -1,44 +1,57 @@
 package com.aliernfrog.toptoast.state
 
+import android.view.Gravity
+import android.view.View
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.findViewTreeLifecycleOwner
+import androidx.lifecycle.setViewTreeLifecycleOwner
+import androidx.savedstate.findViewTreeSavedStateRegistryOwner
+import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.aliernfrog.toptoast.component.TopToast
 import com.aliernfrog.toptoast.enum.TopToastColor
+import com.aliernfrog.toptoast.enum.TopToastType
 import java.util.*
 import kotlin.concurrent.schedule
 
 /**
  * State of TopToasts
+ * @param defaultType [TopToastType] to use when not specified.
  */
-class TopToastState {
+class TopToastState(
+    private val composeView: View,
+    private val defaultType: TopToastType = TopToastType.INTERACTIVE
+) {
     /**
-     * If any toast is being shown
+     * If any interactive toast is being shown
      */
     var isShowing = mutableStateOf(false)
 
     /**
-     * Current toast text
+     * Current interactive toast text
      */
     var text = mutableStateOf<Any>("")
 
     /**
-     * Current toast icon
+     * Current interactive toast icon
      */
     var icon = mutableStateOf<Any?>(null)
 
     /**
-     * Current tint [color][TopToastColor] of toast icon
+     * Current tint [color][TopToastColor] of interactive toast icon
      */
     var iconTintColor: Any = TopToastColor.PRIMARY
 
     /**
-     * Current Unit to invoke on click
+     * Current Unit to invoke on interactive toast click
      */
     var onClick: (() -> Unit)? = null
 
@@ -50,34 +63,56 @@ class TopToastState {
      * @param text Text shown in toast, can be a [String] or [Int] representing a string constant
      * @param icon [Painter] of icon in toast, can be a [Painter], [ImageVector] or [Int] representing a drawable constant
      * @param iconTintColor Tint color of icon in toast, can be a [Color] or [TopToastColor]
-     * @param stayMs Duration of toast in milliseconds
+     * @param stayMs Duration of toast in milliseconds, will not work on [TopToastType.ANDROID]
+     * @param type [TopToastType] of toast, defaults to [defaultType]
      * @param onToastClick Unit to invoke on toast click
      */
+    @Suppress("DEPRECATION")
     fun showToast(
         text: Any,
         icon: Any? = null,
         iconTintColor: Any = TopToastColor.PRIMARY,
         stayMs: Long = 3000,
+        type: TopToastType = defaultType,
         onToastClick: (() -> Unit)? = null
     ) {
         this.task?.cancel()
         this.timer.purge()
-        this.text.value = text
-        this.icon.value = icon
-        this.iconTintColor = iconTintColor
-        this.onClick = onToastClick
-        this.isShowing.value = true
-        this.task = timer.schedule(stayMs) { isShowing.value = false }
+        if (type == TopToastType.INTERACTIVE) {
+            this.text.value = text
+            this.icon.value = icon
+            this.iconTintColor = iconTintColor
+            this.onClick = onToastClick
+            this.isShowing.value = true
+            this.task = timer.schedule(stayMs) { isShowing.value = false }
+        } else {
+            isShowing.value = false
+            val topToastView = ComposeView(composeView.context)
+            topToastView.setContent {
+                TopToast(
+                    text = resolveText(text),
+                    icon = resolveIcon(icon),
+                    iconTintColor = resolveIconTintColor(iconTintColor)
+                )
+            }
+            topToastView.setViewTreeLifecycleOwner(composeView.findViewTreeLifecycleOwner())
+            topToastView.setViewTreeSavedStateRegistryOwner(composeView.findViewTreeSavedStateRegistryOwner())
+            val toast = Toast(composeView.context)
+            toast.setGravity(Gravity.TOP, 0, 0)
+            toast.duration = Toast.LENGTH_LONG
+            toast.view = topToastView
+            toast.show()
+        }
     }
 
     /**
      * Resolves text of toast
      */
     @Composable
-    fun resolveText(): String {
-        return when (val text = this.text.value) {
-            is String -> text
-            is Int -> stringResource(text)
+    fun resolveText(toResolve: Any = this.text.value): String {
+        return when (toResolve) {
+            is String -> toResolve
+            is Int -> stringResource(toResolve)
             else -> throw IllegalArgumentException()
         }
     }
@@ -86,12 +121,12 @@ class TopToastState {
      * Resolves icon of toast
      */
     @Composable
-    fun resolveIcon(): Painter? {
-        val icon = this.icon.value ?: return null
-        return when (icon) {
-            is Painter -> icon
-            is ImageVector -> rememberVectorPainter(icon)
-            is Int -> painterResource(icon)
+    fun resolveIcon(toResolve: Any? = this.icon.value): Painter? {
+        if (toResolve == null) return null
+        return when (toResolve) {
+            is Painter -> toResolve
+            is ImageVector -> rememberVectorPainter(toResolve)
+            is Int -> painterResource(toResolve)
             else -> throw IllegalArgumentException()
         }
     }
@@ -100,10 +135,10 @@ class TopToastState {
      * Resolves icon tint color of toast
      */
     @Composable
-    fun resolveIconTintColor(): Color {
-        return when (val color = this.iconTintColor) {
-            is Color -> color
-            is TopToastColor -> color.getColor()
+    fun resolveIconTintColor(toResolve: Any = this.iconTintColor): Color {
+        return when (toResolve) {
+            is Color -> toResolve
+            is TopToastColor -> toResolve.getColor()
             else -> throw IllegalArgumentException()
         }
     }
