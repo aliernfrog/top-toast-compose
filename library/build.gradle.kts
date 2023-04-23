@@ -4,7 +4,7 @@ plugins {
     id("maven-publish")
 }
 
-val libraryVersion: String by rootProject.extra
+val libraryVersionName: String by rootProject.extra
 val composeCompilerVersion: String by rootProject.extra
 val composeVersion: String by rootProject.extra
 val material3Version: String by rootProject.extra
@@ -56,7 +56,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "aliernfrog"
                 artifactId = "top-toast-compose"
-                version = libraryVersion
+                version = libraryVersionName
             }
         }
     }

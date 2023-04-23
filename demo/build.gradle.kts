@@ -3,7 +3,8 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
-val libraryVersion: String by rootProject.extra
+val libraryVersionName: String by rootProject.extra
+val libraryVersionCode: Int by rootProject.extra
 val composeCompilerVersion: String by rootProject.extra
 val composeVersion: String by rootProject.extra
 val material3Version: String by rootProject.extra
@@ -16,8 +17,8 @@ android {
         applicationId = "com.aliernfrog.toptoastdemo"
         minSdk = 21
         targetSdk = 33
-        versionCode = libraryVersion.replace(".","").toInt()
-        versionName = libraryVersion
+        versionCode = libraryVersionCode
+        versionName = libraryVersionName
         vectorDrawables { useSupportLibrary = true }
     }
 
