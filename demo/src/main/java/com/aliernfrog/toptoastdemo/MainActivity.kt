@@ -114,7 +114,7 @@ class MainActivity : ComponentActivity() {
             onDismissRequest = { dialogShown = false },
             title = { Text("TopToast") },
             text = {
-                Text("Android type toasts are shown above this dialog, while interactive ones (unfortunately) aren't")
+                Text("Android type toasts are shown above this dialog and any modal, while interactive ones (unfortunately) aren't")
             },
             confirmButton = {
                 OutlinedButton(onClick = { dialogShown = false }) {

@@ -23,7 +23,7 @@ fun TopToast(
     text: String = state?.resolveText() ?: "",
     icon: Painter? = state?.resolveIcon(),
     iconTintColor: Color = state?.resolveIconTintColor() ?: MaterialTheme.colorScheme.primary,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = state?.onClick
 ) {
     Column(
         modifier = Modifier

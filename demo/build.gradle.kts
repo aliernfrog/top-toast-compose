@@ -3,7 +3,8 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
-val libraryVersion: String by rootProject.extra
+val libraryVersionName: String by rootProject.extra
+val libraryVersionCode: Int by rootProject.extra
 val composeCompilerVersion: String by rootProject.extra
 val composeVersion: String by rootProject.extra
 val material3Version: String by rootProject.extra
@@ -16,8 +17,8 @@ android {
         applicationId = "com.aliernfrog.toptoastdemo"
         minSdk = 21
         targetSdk = 33
-        versionCode = libraryVersion.replace(".","").toInt()
-        versionName = libraryVersion
+        versionCode = libraryVersionCode
+        versionName = libraryVersionName
         vectorDrawables { useSupportLibrary = true }
     }
 
@@ -53,10 +54,10 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.core:core-ktx:1.10.0")
     implementation("androidx.compose.ui:ui:$composeVersion")
     implementation("androidx.compose.material3:material3:$material3Version")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
-    implementation("androidx.activity:activity-compose:1.6.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
+    implementation("androidx.activity:activity-compose:1.7.1")
     implementation(project(":library"))
 }

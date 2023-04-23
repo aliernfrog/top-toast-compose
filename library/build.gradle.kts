@@ -4,7 +4,7 @@ plugins {
     id("maven-publish")
 }
 
-val libraryVersion: String by rootProject.extra
+val libraryVersionName: String by rootProject.extra
 val composeCompilerVersion: String by rootProject.extra
 val composeVersion: String by rootProject.extra
 val material3Version: String by rootProject.extra
@@ -43,10 +43,10 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.core:core-ktx:1.10.0")
     implementation("androidx.compose.ui:ui:$composeVersion")
     implementation("androidx.compose.material3:material3:$material3Version")
-    implementation("androidx.savedstate:savedstate-ktx:1.2.0")
+    implementation("androidx.savedstate:savedstate-ktx:1.2.1")
 }
 
 afterEvaluate {
@@ -56,7 +56,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "aliernfrog"
                 artifactId = "top-toast-compose"
-                version = libraryVersion
+                version = libraryVersionName
             }
         }
     }
