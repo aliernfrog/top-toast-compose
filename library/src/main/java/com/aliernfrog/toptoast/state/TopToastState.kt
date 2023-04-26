@@ -4,7 +4,9 @@ import android.view.Gravity
 import android.view.View
 import android.widget.Toast
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -33,17 +35,17 @@ class TopToastState(
     /**
      * Whether any interactive toast is being shown
      */
-    var isShowing = mutableStateOf(false)
+    var isShowing by mutableStateOf(false)
 
     /**
      * Current interactive toast text
      */
-    var text = mutableStateOf<Any>("")
+    var text by mutableStateOf<Any>("")
 
     /**
      * Current interactive toast icon
      */
-    var icon = mutableStateOf<Any?>(null)
+    var icon by mutableStateOf<Any?>(null)
 
     /**
      * Current tint [color][TopToastColor] of interactive toast icon
@@ -81,8 +83,8 @@ class TopToastState(
         this.task?.cancel()
         this.timer.purge()
         if (type == TopToastType.INTERACTIVE) {
-            this.text.value = text
-            this.icon.value = icon
+            this.text = text
+            this.icon = icon
             this.iconTintColor = iconTintColor
             this.onClick = buildToastClickUnit(
                 dismissOnClick = dismissOnClick,
@@ -91,7 +93,7 @@ class TopToastState(
                     dismissToast()
                 }
             )
-            this.isShowing.value = true
+            this.isShowing = true
             this.task = timer.schedule(stayMs) { dismissToast() }
         } else {
             dismissToast()
@@ -117,14 +119,14 @@ class TopToastState(
      * Dismisses [TopToastType.INTERACTIVE] toast
      */
     fun dismissToast() {
-        isShowing.value = false
+        isShowing = false
     }
 
     /**
      * Resolves text of toast
      */
     @Composable
-    fun resolveText(toResolve: Any = this.text.value): String {
+    fun resolveText(toResolve: Any = this.text): String {
         return when (toResolve) {
             is String -> toResolve
             is Int -> stringResource(toResolve)
@@ -136,7 +138,7 @@ class TopToastState(
      * Resolves icon of toast
      */
     @Composable
-    fun resolveIcon(toResolve: Any? = this.icon.value): Painter? {
+    fun resolveIcon(toResolve: Any? = this.icon): Painter? {
         if (toResolve == null) return null
         return when (toResolve) {
             is Painter -> toResolve
