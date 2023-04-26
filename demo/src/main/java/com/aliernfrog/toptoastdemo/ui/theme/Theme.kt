@@ -4,32 +4,7 @@ import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-
-private val DarkColorPalette = darkColorScheme(
-    background = BackgroundDark,
-    surface = BackgroundDark,
-    primary = Blue,
-    secondary = LinearDark,
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onBackground = Color.White,
-    onSurface = Color.White,
-    onError = Color.White
-)
-
-private val LightColorPalette = lightColorScheme(
-    background = BackgroundLight,
-    surface = BackgroundLight,
-    primary = Blue,
-    secondary = LinearLight,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black,
-    onError = Color.White
-)
 
 @Composable
 fun TopToastComposeTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
@@ -37,8 +12,8 @@ fun TopToastComposeTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @C
     val colors = when {
         dynamicColors && darkTheme -> dynamicDarkColorScheme(LocalContext.current)
         dynamicColors && !darkTheme -> dynamicLightColorScheme(LocalContext.current)
-        darkTheme -> DarkColorPalette
-        else -> LightColorPalette
+        darkTheme -> darkColorScheme()
+        else -> lightColorScheme()
     }
 
     MaterialTheme(
