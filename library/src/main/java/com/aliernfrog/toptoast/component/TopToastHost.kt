@@ -30,7 +30,7 @@ fun TopToastHost(
         SwipeToDismiss(
             state = rememberDismissState(confirmValueChange = {
                 val dismissed = it == DismissValue.DismissedToStart || it == DismissValue.DismissedToEnd
-                if (dismissed) state.isShowing.value = false
+                if (dismissed) state.dismissToast()
                 true
             }),
             background = {},

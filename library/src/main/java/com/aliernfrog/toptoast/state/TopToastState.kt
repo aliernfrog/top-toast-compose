@@ -88,13 +88,13 @@ class TopToastState(
                 dismissOnClick = dismissOnClick,
                 onClick = onToastClick,
                 onToastDismissRequest = {
-                    this.isShowing.value = false
+                    dismissToast()
                 }
             )
             this.isShowing.value = true
-            this.task = timer.schedule(stayMs) { isShowing.value = false }
+            this.task = timer.schedule(stayMs) { dismissToast() }
         } else {
-            isShowing.value = false
+            dismissToast()
             val topToastView = ComposeView(composeView.context)
             topToastView.setContent {
                 TopToast(
@@ -111,6 +111,13 @@ class TopToastState(
             toast.view = topToastView
             toast.show()
         }
+    }
+
+    /**
+     * Dismisses [TopToastType.INTERACTIVE] toast
+     */
+    fun dismissToast() {
+        isShowing.value = false
     }
 
     /**
