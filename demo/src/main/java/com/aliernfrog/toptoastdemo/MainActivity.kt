@@ -85,7 +85,21 @@ class MainActivity : ComponentActivity() {
                         iconTintColor = TopToastColor.ERROR
                     )
                 }
-                DemoButton(label = "Clickable toast") {
+                DemoButton(label = "Clickable toast (dismiss on click)") {
+                    topToastState.showToast(
+                        text = "This will dismiss when clicked",
+                        dismissOnClick = true
+                    )
+                }
+                DemoButton(label = "Clickable toast (stay on click)") {
+                    topToastState.showToast(
+                        text = "This will not dismiss when clicked",
+                        stayMs = 10000,
+                        dismissOnClick = false,
+                        onToastClick = {}
+                    )
+                }
+                DemoButton(label = "Clickable toast (close app on click)") {
                     topToastState.showToast(
                         text = "This will close the app when clicked",
                         onToastClick = {

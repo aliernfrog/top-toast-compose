@@ -22,7 +22,7 @@ fun TopToastHost(
     modifier: Modifier = Modifier
 ) {
     AnimatedVisibility(
-        visible = state.isShowing.value,
+        visible = state.isShowing,
         modifier = modifier,
         enter = slideInVertically(initialOffsetY = { fullHeight -> -fullHeight }, animationSpec = tween(durationMillis = 500)) + fadeIn(animationSpec = tween(delayMillis = 250, durationMillis = 250)),
         exit = slideOutVertically(targetOffsetY = { fullHeight -> -fullHeight }, animationSpec = tween(durationMillis = 500)) + fadeOut(animationSpec = tween(durationMillis = 150))
@@ -30,7 +30,7 @@ fun TopToastHost(
         SwipeToDismiss(
             state = rememberDismissState(confirmValueChange = {
                 val dismissed = it == DismissValue.DismissedToStart || it == DismissValue.DismissedToEnd
-                if (dismissed) state.isShowing.value = false
+                if (dismissed) state.dismissToast()
                 true
             }),
             background = {},
