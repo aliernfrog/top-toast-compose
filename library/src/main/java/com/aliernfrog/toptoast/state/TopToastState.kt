@@ -31,7 +31,7 @@ class TopToastState(
     private val defaultType: TopToastType = TopToastType.INTERACTIVE
 ) {
     /**
-     * If any interactive toast is being shown
+     * Whether any interactive toast is being shown
      */
     var isShowing = mutableStateOf(false)
 
@@ -63,9 +63,10 @@ class TopToastState(
      * @param text Text shown in toast, can be a [String] or [Int] representing a string constant
      * @param icon [Painter] of icon in toast, can be a [Painter], [ImageVector] or [Int] representing a drawable constant
      * @param iconTintColor Tint color of icon in toast, can be a [Color] or [TopToastColor]
-     * @param stayMs Duration of toast in milliseconds, will not work on [TopToastType.ANDROID]
+     * @param stayMs Duration of toast in milliseconds, only for [TopToastType.INTERACTIVE]
      * @param type [TopToastType] of toast, defaults to [defaultType]
-     * @param onToastClick Unit to invoke on toast click
+     * @param dismissOnClick Whether to dismiss the toast on click, only for [TopToastType.INTERACTIVE]
+     * @param onToastClick Unit to invoke on toast click, only for [TopToastType.INTERACTIVE]
      */
     @Suppress("DEPRECATION")
     fun showToast(
@@ -74,6 +75,7 @@ class TopToastState(
         iconTintColor: Any = TopToastColor.PRIMARY,
         stayMs: Long = 3000,
         type: TopToastType = defaultType,
+        dismissOnClick: Boolean? = null,
         onToastClick: (() -> Unit)? = null
     ) {
         this.task?.cancel()
@@ -82,7 +84,13 @@ class TopToastState(
             this.text.value = text
             this.icon.value = icon
             this.iconTintColor = iconTintColor
-            this.onClick = onToastClick
+            this.onClick = buildToastClickUnit(
+                dismissOnClick = dismissOnClick,
+                onClick = onToastClick,
+                onToastDismissRequest = {
+                    this.isShowing.value = false
+                }
+            )
             this.isShowing.value = true
             this.task = timer.schedule(stayMs) { isShowing.value = false }
         } else {
@@ -141,5 +149,18 @@ class TopToastState(
             is TopToastColor -> toResolve.getColor()
             else -> throw IllegalArgumentException()
         }
+    }
+}
+
+private fun buildToastClickUnit(
+    dismissOnClick: Boolean?,
+    onClick: (() -> Unit)?,
+    onToastDismissRequest: () -> Unit
+): (() -> Unit)? {
+    val shouldDismissOnClick = if (onClick == null) (dismissOnClick ?: false) else (dismissOnClick ?: true)
+    if (!shouldDismissOnClick && onClick == null) return null
+    return {
+        if (shouldDismissOnClick) onToastDismissRequest()
+        onClick?.invoke()
     }
 }
