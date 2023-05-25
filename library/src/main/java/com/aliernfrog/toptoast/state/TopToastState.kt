@@ -1,5 +1,6 @@
 package com.aliernfrog.toptoast.state
 
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.Toast
@@ -26,10 +27,11 @@ import kotlin.concurrent.schedule
 
 /**
  * State of TopToasts
+ * @param composeView Compose view used for [TopToastType.ANDROID] toasts, can also be set later using [TopToastState.setComposeView]
  * @param defaultType [TopToastType] to use when not specified.
  */
 class TopToastState(
-    private val composeView: View,
+    private var composeView: View?,
     private val defaultType: TopToastType = TopToastType.INTERACTIVE
 ) {
     /**
@@ -82,36 +84,44 @@ class TopToastState(
     ) {
         this.task?.cancel()
         this.timer.purge()
-        if (type == TopToastType.INTERACTIVE) {
-            this.text = text
-            this.icon = icon
-            this.iconTintColor = iconTintColor
-            this.onClick = buildToastClickUnit(
-                dismissOnClick = dismissOnClick,
-                onClick = onToastClick,
-                onToastDismissRequest = {
-                    dismissToast()
-                }
-            )
-            this.isShowing = true
-            this.task = timer.schedule(stayMs) { dismissToast() }
-        } else {
-            dismissToast()
-            val topToastView = ComposeView(composeView.context)
-            topToastView.setContent {
-                TopToast(
-                    text = resolveText(text),
-                    icon = resolveIcon(icon),
-                    iconTintColor = resolveIconTintColor(iconTintColor)
+        when (type) {
+            TopToastType.INTERACTIVE -> {
+                this.text = text
+                this.icon = icon
+                this.iconTintColor = iconTintColor
+                this.onClick = buildToastClickUnit(
+                    dismissOnClick = dismissOnClick,
+                    onClick = onToastClick,
+                    onToastDismissRequest = {
+                        dismissToast()
+                    }
                 )
+                this.isShowing = true
+                this.task = timer.schedule(stayMs) { dismissToast() }
             }
-            topToastView.setViewTreeLifecycleOwner(composeView.findViewTreeLifecycleOwner())
-            topToastView.setViewTreeSavedStateRegistryOwner(composeView.findViewTreeSavedStateRegistryOwner())
-            val toast = Toast(composeView.context)
-            toast.setGravity(Gravity.TOP, 0, 0)
-            toast.duration = Toast.LENGTH_LONG
-            toast.view = topToastView
-            toast.show()
+            TopToastType.ANDROID -> {
+                val toastView = composeView
+                if (toastView == null) {
+                    Log.w("TopToast", "composeView is required for ANDROID type toasts, but it is null")
+                } else {
+                    dismissToast()
+                    val topToastView = ComposeView(toastView.context)
+                    topToastView.setContent {
+                        TopToast(
+                            text = resolveText(text),
+                            icon = resolveIcon(icon),
+                            iconTintColor = resolveIconTintColor(iconTintColor)
+                        )
+                    }
+                    topToastView.setViewTreeLifecycleOwner(toastView.findViewTreeLifecycleOwner())
+                    topToastView.setViewTreeSavedStateRegistryOwner(toastView.findViewTreeSavedStateRegistryOwner())
+                    val toast = Toast(toastView.context)
+                    toast.setGravity(Gravity.TOP, 0, 0)
+                    toast.duration = Toast.LENGTH_LONG
+                    toast.view = topToastView
+                    toast.show()
+                }
+            }
         }
     }
 
@@ -120,6 +130,13 @@ class TopToastState(
      */
     fun dismissToast() {
         isShowing = false
+    }
+
+    /**
+     * Sets composeView
+     */
+    fun setComposeView(composeView: View) {
+        this.composeView = composeView
     }
 
     /**
