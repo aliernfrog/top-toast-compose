@@ -46,7 +46,7 @@ android {
         kotlinCompilerExtensionVersion = composeCompilerVersion
     }
 
-    packagingOptions {
+    packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
@@ -54,7 +54,7 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.10.0")
+    implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.compose.ui:ui:$composeVersion")
     implementation("androidx.compose.material3:material3:$material3Version")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
