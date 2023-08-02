@@ -11,12 +11,12 @@ val material3Version: String by rootProject.extra
 
 android {
     namespace = "com.aliernfrog.toptoastdemo"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.aliernfrog.toptoastdemo"
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 34
         versionCode = libraryVersionCode
         versionName = libraryVersionName
         vectorDrawables { useSupportLibrary = true }
@@ -58,6 +58,6 @@ dependencies {
     implementation("androidx.compose.ui:ui:$composeVersion")
     implementation("androidx.compose.material3:material3:$material3Version")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation("androidx.activity:activity-compose:1.7.1")
+    implementation("androidx.activity:activity-compose:1.7.2")
     implementation(project(":library"))
 }
