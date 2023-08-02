@@ -125,6 +125,7 @@ class MainActivity : ComponentActivity() {
                 iconTintColor = MaterialTheme.colorScheme.secondary
             )
         }
+
         if (dialogShown) AlertDialog(
             onDismissRequest = { dialogShown = false },
             title = { Text("TopToast") },
@@ -132,7 +133,7 @@ class MainActivity : ComponentActivity() {
                 Text("Android type toasts are shown above this dialog and any modal, while interactive ones (unfortunately) aren't")
             },
             confirmButton = {
-                OutlinedButton(onClick = { dialogShown = false }) {
+                TextButton(onClick = { dialogShown = false }) {
                     Text("Dismiss")
                 }
             }
