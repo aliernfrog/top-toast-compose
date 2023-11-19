@@ -13,7 +13,7 @@ val material3Version: String by rootProject.extra
 
 android {
     namespace = "com.aliernfrog.toptoast"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 21
