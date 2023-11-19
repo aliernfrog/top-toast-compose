@@ -27,17 +27,24 @@ import kotlin.concurrent.schedule
 /**
  * State of TopToasts
  * @param composeView Compose view used for [TopToastType.ANDROID] toasts, can also be set later using [TopToastState.setComposeView]
- * @param defaultType [TopToastType] to use when not specified.
+ * @param defaultType [TopToastType] to use when not specified
+ * @param allowSwipingByDefault Whether to allow swiping toasts to dismiss them by default
  */
 class TopToastState(
     private var composeView: View?,
     @Deprecated("This is no longer needed as showAndroidToast is now a separate method. Will be removed in next releases.")
-    private val defaultType: TopToastType = TopToastType.INTERACTIVE
+    private val defaultType: TopToastType = TopToastType.INTERACTIVE,
+    private val allowSwipingByDefault: Boolean = true
 ) {
     /**
      * Whether any interactive toast is being shown
      */
     var isShowing by mutableStateOf(false)
+
+    /**
+     * Whether to allow swiping the toast to dismiss it
+     */
+    var allowSwipeToDismiss by mutableStateOf(allowSwipingByDefault)
 
     /**
      * Current interactive toast text
@@ -73,8 +80,9 @@ class TopToastState(
      * @param onToastClick Unit to invoke on toast click, only for [TopToastType.INTERACTIVE]
      */
     @Deprecated(
-        message = "Use showToast showToast(text, icon, iconTintColor, duration, dismissOnClick, onToastClick) or showAndroidToast(text, icon, iconTintColor, duration) instead. This method will be removed in next releases.",
-        replaceWith = ReplaceWith("showToast", "showToast(text, icon, iconTintColor, duration, dismissOnClick, onToastClick)")
+        message = "Use showToast(text, icon, iconTintColor, duration, swipeToDismiss, dismissOnClick, onToastClick) or showAndroidToast(text, icon, iconTintColor, duration) instead. This method will be removed in next releases.",
+        replaceWith = ReplaceWith("showToast", "showToast(text, icon, iconTintColor, duration, swipeToDismiss, dismissOnClick, onToastClick)"),
+        level = DeprecationLevel.HIDDEN
     )
     fun showToast(
         text: Any,
@@ -110,6 +118,7 @@ class TopToastState(
      * @param icon [Painter] of icon in toast, can be a [Painter], [ImageVector] or [Int] representing a drawable constant
      * @param iconTintColor Tint color of icon in toast, can be a [Color] or [TopToastColor]
      * @param duration Duration of toast in milliseconds
+     * @param swipeToDismiss Whether to allow swiping the toast to dismiss it
      * @param dismissOnClick Whether to dismiss the toast on click
      * @param onToastClick Unit to invoke on toast click
      */
@@ -118,6 +127,7 @@ class TopToastState(
         icon: Any? = null,
         iconTintColor: Any = TopToastColor.PRIMARY,
         duration: Long = 3000,
+        swipeToDismiss: Boolean = this.allowSwipingByDefault,
         dismissOnClick: Boolean? = null,
         onToastClick: (() -> Unit)? = null
     ) {
@@ -132,6 +142,7 @@ class TopToastState(
                 dismissToast()
             }
         )
+        this.allowSwipeToDismiss = swipeToDismiss
         this.isShowing = true
         this.task = timer.schedule(duration) { dismissToast() }
     }
@@ -186,7 +197,7 @@ class TopToastState(
     /**
      * Cancels the current scheduled dismission task.
      */
-    fun cancelDismissionTask() {
+    private fun cancelDismissionTask() {
         this.task?.cancel()
         this.timer.purge()
     }

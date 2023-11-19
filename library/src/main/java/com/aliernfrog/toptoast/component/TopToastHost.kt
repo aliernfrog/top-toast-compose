@@ -4,7 +4,7 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.material3.DismissValue
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SwipeToDismiss
+import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -27,16 +27,17 @@ fun TopToastHost(
         enter = slideInVertically(initialOffsetY = { fullHeight -> -fullHeight }, animationSpec = tween(durationMillis = 500)) + fadeIn(animationSpec = tween(delayMillis = 250, durationMillis = 250)),
         exit = slideOutVertically(targetOffsetY = { fullHeight -> -fullHeight }, animationSpec = tween(durationMillis = 500)) + fadeOut(animationSpec = tween(durationMillis = 150))
     ) {
-        SwipeToDismiss(
+        if (state.allowSwipeToDismiss) SwipeToDismissBox(
             state = rememberDismissState(confirmValueChange = {
                 val dismissed = it == DismissValue.DismissedToStart || it == DismissValue.DismissedToEnd
                 if (dismissed) state.dismissToast()
                 true
             }),
-            background = {},
-            dismissContent = {
+            backgroundContent = {},
+            content = {
                 TopToast(state)
             }
         )
+        else TopToast(state)
     }
 }
