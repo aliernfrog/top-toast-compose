@@ -24,7 +24,6 @@ import androidx.core.view.WindowCompat
 import com.aliernfrog.toptoast.component.TopToast
 import com.aliernfrog.toptoast.component.TopToastHost
 import com.aliernfrog.toptoast.enum.TopToastColor
-import com.aliernfrog.toptoast.enum.TopToastType
 import com.aliernfrog.toptoast.state.TopToastState
 import com.aliernfrog.toptoastdemo.ui.theme.TopToastComposeTheme
 
@@ -69,7 +68,7 @@ class MainActivity : ComponentActivity() {
                 DemoButton(label = "Custom timer toast") {
                     topToastState.showToast(
                         text = "This toast will hide after a minute, swipe to dismiss",
-                        stayMs = 60000
+                        duration = 60000
                     )
                 }
                 DemoButton(label = "Success toast") {
@@ -95,7 +94,7 @@ class MainActivity : ComponentActivity() {
                 DemoButton(label = "Clickable toast (stay on click)") {
                     topToastState.showToast(
                         text = "This will not dismiss when clicked",
-                        stayMs = 10000,
+                        duration = 10000,
                         dismissOnClick = false,
                         onToastClick = {}
                     )
@@ -110,11 +109,10 @@ class MainActivity : ComponentActivity() {
                 }
                 DemoButton(label = "Android type toast + dialog") {
                     dialogShown = true
-                    topToastState.showToast(
+                    topToastState.showAndroidToast(
                         text = "This is an Android type TopToast",
                         icon = Icons.Rounded.Info,
-                        iconTintColor = TopToastColor.ON_SURFACE,
-                        type = TopToastType.ANDROID
+                        iconTintColor = TopToastColor.ON_SURFACE
                     )
                 }
             }
