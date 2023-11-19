@@ -5,6 +5,8 @@ plugins {
 }
 
 val libraryVersionName: String by rootProject.extra
+
+val coreVersion: String by rootProject.extra
 val composeCompilerVersion: String by rootProject.extra
 val composeVersion: String by rootProject.extra
 val material3Version: String by rootProject.extra
@@ -43,7 +45,7 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.10.1")
+    implementation("androidx.core:core-ktx:$coreVersion")
     implementation("androidx.compose.ui:ui:$composeVersion")
     implementation("androidx.compose.material3:material3:$material3Version")
     implementation("androidx.savedstate:savedstate-ktx:1.2.1")
