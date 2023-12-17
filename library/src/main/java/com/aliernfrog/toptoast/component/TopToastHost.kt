@@ -2,10 +2,10 @@ package com.aliernfrog.toptoast.component
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.material3.DismissValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SwipeToDismissBox
-import androidx.compose.material3.rememberDismissState
+import androidx.compose.material3.SwipeToDismissValue
+import androidx.compose.material3.rememberSwipeToDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.aliernfrog.toptoast.state.TopToastState
@@ -24,15 +24,28 @@ fun TopToastHost(
     AnimatedVisibility(
         visible = state.isShowing,
         modifier = modifier,
-        enter = slideInVertically(initialOffsetY = { fullHeight -> -fullHeight }, animationSpec = tween(durationMillis = 500)) + fadeIn(animationSpec = tween(delayMillis = 250, durationMillis = 250)),
-        exit = slideOutVertically(targetOffsetY = { fullHeight -> -fullHeight }, animationSpec = tween(durationMillis = 500)) + fadeOut(animationSpec = tween(durationMillis = 150))
+        enter = slideInVertically(
+            initialOffsetY = { fullHeight -> -fullHeight },
+            animationSpec = tween(durationMillis = 500)
+        ) + fadeIn(
+            animationSpec = tween(delayMillis = 250, durationMillis = 250)
+        ),
+        exit = slideOutVertically(
+            targetOffsetY = { fullHeight -> -fullHeight },
+            animationSpec = tween(durationMillis = 500)
+        ) + fadeOut(
+            animationSpec = tween(durationMillis = 150)
+        )
     ) {
         if (state.allowSwipeToDismiss) SwipeToDismissBox(
-            state = rememberDismissState(confirmValueChange = {
-                val dismissed = it == DismissValue.DismissedToStart || it == DismissValue.DismissedToEnd
-                if (dismissed) state.dismissToast()
-                true
-            }),
+            state = rememberSwipeToDismissState(
+                confirmValueChange = {
+                    val dismissed =
+                        it == SwipeToDismissValue.StartToEnd || it == SwipeToDismissValue.EndToStart
+                    if (dismissed) state.dismissToast()
+                    true
+                }
+            ),
             backgroundContent = {},
             content = {
                 TopToast(state)
