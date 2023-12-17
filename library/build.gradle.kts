@@ -51,14 +51,15 @@ dependencies {
     implementation("androidx.savedstate:savedstate-ktx:1.2.1")
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            register("release", MavenPublication::class) {
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            groupId = "aliernfrog"
+            artifactId = "top-toast-compose"
+            version = libraryVersionName
+
+            afterEvaluate {
                 from(components["release"])
-                groupId = "aliernfrog"
-                artifactId = "top-toast-compose"
-                version = libraryVersionName
             }
         }
     }
