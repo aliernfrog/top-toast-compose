@@ -1,3 +1,5 @@
+import java.net.URI
+
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
@@ -60,6 +62,22 @@ publishing {
 
             afterEvaluate {
                 from(components["release"])
+            }
+        }
+    }
+
+    val githubPackagesURL = System.getenv("GITHUB_PACKAGES_URL")
+
+    if (
+        !System.getenv("GITHUB_TOKEN").isNullOrEmpty()
+        && !githubPackagesURL.isNullOrEmpty()
+    ) repositories {
+        maven {
+            name = "GitHubPackages"
+            url = URI(githubPackagesURL)
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
             }
         }
     }
