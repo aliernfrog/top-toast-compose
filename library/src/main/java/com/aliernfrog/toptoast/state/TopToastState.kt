@@ -26,12 +26,14 @@ import kotlin.concurrent.schedule
 
 /**
  * State of TopToasts
- * @param composeView Compose view used for [TopToastType.ANDROID] toasts, can also be set later using [TopToastState.setComposeView]
+ * @param composeView Compose view used for Android type toasts, can also be set later using [TopToastState.setComposeView]
+ * @param appTheme App theme to be used for Android type toasts
  * @param defaultType [TopToastType] to use when not specified
  * @param allowSwipingByDefault Whether to allow swiping toasts to dismiss them by default
  */
 class TopToastState(
     private var composeView: View?,
+    private var appTheme: (@Composable (content: @Composable () -> Unit) -> Unit)?,
     @Deprecated("This is no longer needed as showAndroidToast is now a separate method. Will be removed in next releases.")
     private val defaultType: TopToastType = TopToastType.INTERACTIVE,
     private val allowSwipingByDefault: Boolean = true
@@ -170,11 +172,18 @@ class TopToastState(
             if (view == null) throw NullPointerException("composeView is null! Set it using setComposeView()")
             val topToastView = ComposeView(view.context)
             topToastView.setContent {
-                TopToast(
-                    text = resolveText(text),
-                    icon = resolveIcon(icon),
-                    iconTintColor = resolveIconTintColor(iconTintColor)
-                )
+                @Composable
+                fun Toast() {
+                    TopToast(
+                        text = resolveText(text),
+                        icon = resolveIcon(icon),
+                        iconTintColor = resolveIconTintColor(iconTintColor)
+                    )
+                }
+
+                appTheme?.invoke {
+                    Toast()
+                } ?: Toast()
             }
             topToastView.setViewTreeLifecycleOwner(view.findViewTreeLifecycleOwner())
             topToastView.setViewTreeSavedStateRegistryOwner(view.findViewTreeSavedStateRegistryOwner())
