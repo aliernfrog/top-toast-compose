@@ -293,6 +293,13 @@ class TopToastState(
     }
 
     /**
+     * Sets appTheme used in toasts
+     */
+    fun setAppTheme(theme: @Composable (content: @Composable () -> Unit) -> Unit) {
+        this.appTheme = theme
+    }
+
+    /**
      * Resolves text of toast
      */
     @Composable
