@@ -77,7 +77,7 @@ Box(
             onClick = {
                 // Shows a toast using Android Toast APIs, visible on top of modals and dialogs
                 // Cannot be interacted with
-                topToastState.showToast("This is a toast")
+                topToastState.showAndroidToast("This is a toast")
             }
         )
     }
