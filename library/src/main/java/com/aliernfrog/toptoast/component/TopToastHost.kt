@@ -4,8 +4,8 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SwipeToDismissBox
-import androidx.compose.material3.SwipeToDismissValue
-import androidx.compose.material3.rememberSwipeToDismissState
+import androidx.compose.material3.SwipeToDismissBoxValue
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.aliernfrog.toptoast.state.TopToastState
@@ -38,10 +38,10 @@ fun TopToastHost(
         )
     ) {
         if (state.allowSwipeToDismiss) SwipeToDismissBox(
-            state = rememberSwipeToDismissState(
+            state = rememberSwipeToDismissBoxState(
                 confirmValueChange = {
                     val dismissed =
-                        it == SwipeToDismissValue.StartToEnd || it == SwipeToDismissValue.EndToStart
+                        it == SwipeToDismissBoxValue.StartToEnd || it == SwipeToDismissBoxValue.EndToStart
                     if (dismissed) state.dismissToast()
                     true
                 }
