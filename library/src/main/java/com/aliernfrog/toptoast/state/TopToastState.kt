@@ -3,10 +3,15 @@ package com.aliernfrog.toptoast.state
 import android.view.Gravity
 import android.view.View
 import android.widget.Toast
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -14,6 +19,7 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.lifecycle.setViewTreeLifecycleOwner
 import androidx.savedstate.findViewTreeSavedStateRegistryOwner
@@ -21,7 +27,8 @@ import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.aliernfrog.toptoast.component.TopToast
 import com.aliernfrog.toptoast.enum.TopToastColor
 import com.aliernfrog.toptoast.enum.TopToastType
-import java.util.*
+import java.util.Timer
+import java.util.TimerTask
 import kotlin.concurrent.schedule
 
 /**
@@ -36,7 +43,14 @@ class TopToastState(
     private var appTheme: (@Composable (content: @Composable () -> Unit) -> Unit)?,
     @Deprecated("This is no longer needed as showAndroidToast is now a separate method. Will be removed in next releases.")
     private val defaultType: TopToastType = TopToastType.INTERACTIVE,
-    private val allowSwipingByDefault: Boolean = true
+    private val allowSwipingByDefault: Boolean = true,
+    private val defaultAndroidToast: @Composable (text: String, icon: Painter?, iconTintColor: Color) -> Unit = { title, icon, iconTintColor ->
+        TopToast(
+            text = title,
+            icon = icon,
+            iconTintColor = iconTintColor
+        )
+    }
 ) {
     /**
      * Whether any interactive toast is being shown
@@ -248,11 +262,18 @@ class TopToastState(
             topToastView.setContent {
                 @Composable
                 fun Toast() {
-                    TopToast(
-                        text = resolveText(text),
-                        icon = resolveIcon(icon),
-                        iconTintColor = resolveIconTintColor(iconTintColor)
-                    )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp, start = 24.dp, end = 24.dp), // avoid shadow getting cropped
+                        contentAlignment = Alignment.Center
+                    ) {
+                        defaultAndroidToast(
+                            resolveText(text),
+                            resolveIcon(icon),
+                            resolveIconTintColor(iconTintColor)
+                        )
+                    }
                 }
 
                 appTheme?.invoke {
