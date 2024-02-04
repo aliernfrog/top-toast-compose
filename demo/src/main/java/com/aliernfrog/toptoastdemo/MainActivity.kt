@@ -416,7 +416,7 @@ class MainActivity : ComponentActivity() {
             onDismissRequest = { dialogShown = false },
             title = { Text("TopToast") },
             text = {
-                Text("Android type toasts are shown above this dialog and any modal, while interactive ones (unfortunately) aren't")
+                Text("Toasts shown using Android Toast API can show on top of bottom sheets and alert dialogs such as this")
             },
             confirmButton = {
                 TextButton(onClick = { dialogShown = false }) {
