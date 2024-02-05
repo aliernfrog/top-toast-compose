@@ -44,7 +44,7 @@ fun TopToast(
             .padding(TopToastElevation+1.4.dp) // avoid shadow getting cropped
             .shadow(TopToastElevation, TopToastShape)
             .clip(TopToastShape)
-            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp))
+            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp))
             .animateContentSize()
             .run { onClick?.let {
                 clickable(
