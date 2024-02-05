@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import com.aliernfrog.toptoastdemo.MainActivity
 
 val supportsMaterialYou = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 
@@ -27,6 +28,7 @@ fun TopToastComposeTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @C
 
     val view = LocalView.current
     if (!view.isInEditMode) SideEffect {
+        if (view.context !is MainActivity) return@SideEffect
         val activity = view.context as Activity
         val insetsController = WindowCompat.getInsetsController(activity.window, view)
         val transparentColor = Color.Transparent.toArgb()
@@ -51,3 +53,4 @@ fun TopToastComposeTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @C
         content = content
     )
 }
+
