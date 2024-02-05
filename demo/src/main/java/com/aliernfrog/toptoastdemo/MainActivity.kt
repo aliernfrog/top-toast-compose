@@ -130,7 +130,7 @@ class MainActivity : ComponentActivity() {
             mutableStateOf(TopToastColor.PRIMARY)
         }
         var onToastClick by rememberSaveable {
-            mutableStateOf<Pair<String, (() -> Unit)?>?>("Unclickable" to null)
+            mutableStateOf<Pair<String, (() -> Unit)?>>("Unclickable" to null)
         }
         var dismissToastOnClick by rememberSaveable {
             mutableStateOf(true)
@@ -187,7 +187,7 @@ class MainActivity : ComponentActivity() {
                             toastDuration,
                             swipeToDismiss,
                             dismissToastOnClick,
-                            onToastClick?.second
+                            onToastClick.second
                         )
                         if (showDialogAfterToast) dialogShown = true
                     },
@@ -206,9 +206,9 @@ class MainActivity : ComponentActivity() {
                     .navigationBarsPadding(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                FormSection(title = null) {
+                FormSection(title = "Method") {
                     SegmentedButtons(
-                        options = ToastMethod.entries.map { it.label },
+                        options = ToastMethod.entries.map { it.label }.reversed(),
                         selectedIndex = selectedToastMethod.ordinal,
                         onSelect = { selectedToastMethod = ToastMethod.entries[it] },
                         modifier = Modifier
@@ -364,7 +364,7 @@ class MainActivity : ComponentActivity() {
                                 "Close app" to { finish() }
                             ).forEach { option ->
                                 val onSelect = { onToastClick = option }
-                                val selected = option.first == onToastClick?.first
+                                val selected = option.first == onToastClick.first
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
                                     modifier = Modifier
@@ -380,11 +380,15 @@ class MainActivity : ComponentActivity() {
                                     Text(text = option.first)
                                 }
                             }
-                            CheckBoxRow(
-                                label = "Dismiss toast on click",
-                                checked = dismissToastOnClick,
-                                onCheckedChange = { dismissToastOnClick = it }
-                            )
+                            Crossfade(onToastClick.second != null) { enabled ->
+                                CheckBoxRow(
+                                    label = "Dismiss toast on click"+
+                                            if (!enabled) "\nToast is unclickable" else "",
+                                    checked = enabled && dismissToastOnClick,
+                                    onCheckedChange = { dismissToastOnClick = it },
+                                    enabled = enabled
+                                )
+                            }
                         }
                     }
                 }
