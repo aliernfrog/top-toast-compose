@@ -1,10 +1,12 @@
 package com.aliernfrog.toptoastdemo.enum
 
+import android.widget.Toast
 import com.aliernfrog.toptoast.state.TopToastState
 
 enum class ToastMethod(
     val label: String,
     val description: String,
+    val defaultDuration: Int,
     val execute: (
         topToastState: TopToastState,
         text: Any,
@@ -20,6 +22,7 @@ enum class ToastMethod(
         label = "showToast",
         description = "Shows a TopToast in the TopToastHost. "+
                 "This cannot be shown above alert dialogs and bottom sheets due to limitations.",
+        defaultDuration = 3,
         execute = { topToastState, text, icon, iconTintColor, duration, swipeToDismiss, dismissOnClick, onClick ->
             topToastState.showToast(
                 text = text,
@@ -37,6 +40,7 @@ enum class ToastMethod(
         label = "showAndroidToast",
         description = "Shows a TopToast using the Android Toast API. "+
                 "This can be shown above alert dialogs and bottom sheets, but it cannot be interacted with.",
+        defaultDuration = Toast.LENGTH_LONG,
         execute = { topToastState, text, icon, iconTintColor, duration, _, _, _ ->
             topToastState.showAndroidToast(
                 text = text,

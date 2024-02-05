@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -56,7 +57,6 @@ import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -69,6 +69,7 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import com.aliernfrog.toptoast.component.TopToast
@@ -118,7 +119,7 @@ class MainActivity : ComponentActivity() {
             mutableStateOf("Hello world!")
         }
         var toastDuration by rememberSaveable {
-            mutableIntStateOf(3)
+            mutableStateOf<Int?>(null)
         }
         var toastIcon by rememberSaveable {
             mutableStateOf<ImageVector?>(null)
@@ -137,7 +138,7 @@ class MainActivity : ComponentActivity() {
         }
 
         LaunchedEffect(selectedToastMethod) {
-            toastDuration = if (selectedToastMethod == ToastMethod.ANDROID) Toast.LENGTH_LONG else 3
+            toastDuration = selectedToastMethod.defaultDuration
         }
 
         Scaffold(
@@ -184,7 +185,7 @@ class MainActivity : ComponentActivity() {
                             toastText,
                             toastIcon,
                             toastIconTintColor,
-                            toastDuration,
+                            toastDuration ?: selectedToastMethod.defaultDuration,
                             swipeToDismiss,
                             dismissToastOnClick,
                             onToastClick.second
@@ -208,7 +209,7 @@ class MainActivity : ComponentActivity() {
             ) {
                 FormSection(title = "Method") {
                     SegmentedButtons(
-                        options = ToastMethod.entries.map { it.label }.reversed(),
+                        options = ToastMethod.entries.map { it.label },
                         selectedIndex = selectedToastMethod.ordinal,
                         onSelect = { selectedToastMethod = ToastMethod.entries[it] },
                         modifier = Modifier
@@ -241,15 +242,22 @@ class MainActivity : ComponentActivity() {
                             .padding(horizontal = 16.dp, vertical = 8.dp)
                     ) { isSeconds ->
                         if (isSeconds) OutlinedTextField(
-                            value = toastDuration.toString(),
-                            onValueChange = { toastDuration = it.toIntOrNull() ?: 5 },
+                            value = (toastDuration ?: "").toString(),
+                            onValueChange = { toastDuration = it.toIntOrNull() },
                             label = {
                                 Text("Duration (seconds)")
                             },
+                            placeholder = {
+                                Text(selectedToastMethod.defaultDuration.toString())
+                            },
+                            singleLine = true,
+                            keyboardOptions = KeyboardOptions.Default.copy(
+                                keyboardType = KeyboardType.Number
+                            ),
                             modifier = Modifier.fillMaxWidth()
                         ) else SegmentedButtons(
                             options = listOf("Toast.LENGTH_SHORT", "Toast.LENGTH_LONG"),
-                            selectedIndex = toastDuration,
+                            selectedIndex = toastDuration ?: selectedToastMethod.defaultDuration,
                             onSelect = { toastDuration = it },
                             modifier = Modifier.fillMaxWidth()
                         )
