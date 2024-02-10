@@ -6,6 +6,7 @@ import com.aliernfrog.toptoast.component.TopToastHost
 /**
  * Types of toasts
  */
+@Deprecated("This is no longer needed as showAndroidToast is now a separate method, will be removed in next releases.")
 enum class TopToastType {
 
     /**

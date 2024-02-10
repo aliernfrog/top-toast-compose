@@ -1,3 +1,5 @@
+import java.net.URI
+
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
@@ -5,13 +7,15 @@ plugins {
 }
 
 val libraryVersionName: String by rootProject.extra
+
+val coreVersion: String by rootProject.extra
 val composeCompilerVersion: String by rootProject.extra
 val composeVersion: String by rootProject.extra
 val material3Version: String by rootProject.extra
 
 android {
     namespace = "com.aliernfrog.toptoast"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 21
@@ -43,20 +47,37 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.10.1")
+    implementation("androidx.core:core-ktx:$coreVersion")
     implementation("androidx.compose.ui:ui:$composeVersion")
     implementation("androidx.compose.material3:material3:$material3Version")
     implementation("androidx.savedstate:savedstate-ktx:1.2.1")
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            register("release", MavenPublication::class) {
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            groupId = "aliernfrog"
+            artifactId = "top-toast-compose"
+            version = libraryVersionName
+
+            afterEvaluate {
                 from(components["release"])
-                groupId = "aliernfrog"
-                artifactId = "top-toast-compose"
-                version = libraryVersionName
+            }
+        }
+    }
+
+    val githubPackagesURL = System.getenv("GITHUB_PACKAGES_URL")
+
+    if (
+        !System.getenv("GITHUB_TOKEN").isNullOrEmpty()
+        && !githubPackagesURL.isNullOrEmpty()
+    ) repositories {
+        maven {
+            name = "GitHubPackages"
+            url = URI(githubPackagesURL)
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
             }
         }
     }

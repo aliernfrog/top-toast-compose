@@ -5,6 +5,8 @@ plugins {
 
 val libraryVersionName: String by rootProject.extra
 val libraryVersionCode: Int by rootProject.extra
+
+val coreVersion: String by rootProject.extra
 val composeCompilerVersion: String by rootProject.extra
 val composeVersion: String by rootProject.extra
 val material3Version: String by rootProject.extra
@@ -24,7 +26,8 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
@@ -40,6 +43,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     composeOptions {
@@ -54,10 +58,11 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.10.1")
+    implementation("androidx.core:core-ktx:$coreVersion")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+    implementation("androidx.activity:activity-compose:1.8.2")
     implementation("androidx.compose.ui:ui:$composeVersion")
+    implementation("androidx.compose.material:material:$composeVersion")
     implementation("androidx.compose.material3:material3:$material3Version")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation("androidx.activity:activity-compose:1.7.2")
     implementation(project(":library"))
 }
