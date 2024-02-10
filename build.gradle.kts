@@ -10,4 +10,4 @@ val libraryVersionCode by extra { 140 }
 val coreVersion by extra { "1.12.0" }
 val composeCompilerVersion by extra { "1.5.8" }
 val composeVersion by extra { "1.6.0" }
-val material3Version by extra { "1.2.0-rc01" }
+val material3Version by extra { "1.2.0" }
