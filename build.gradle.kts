@@ -4,8 +4,8 @@ plugins {
     id("org.jetbrains.kotlin.android") version "1.9.23" apply false
 }
 
-val libraryVersionName by extra { "2.0.0" }
-val libraryVersionCode by extra { 200 }
+val libraryVersionName by extra { "2.0.1-alpha01" }
+val libraryVersionCode by extra { 20101 }
 
 val coreVersion by extra { "1.13.0" }
 val composeCompilerVersion by extra { "1.5.12" }
