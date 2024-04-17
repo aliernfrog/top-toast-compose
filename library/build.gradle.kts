@@ -10,8 +10,8 @@ val libraryVersionName: String by rootProject.extra
 
 val coreVersion: String by rootProject.extra
 val composeCompilerVersion: String by rootProject.extra
-val composeVersion: String by rootProject.extra
-val material3Version: String by rootProject.extra
+val composeMaterialVersion: String by rootProject.extra
+val composeMaterial3Version: String by rootProject.extra
 
 android {
     namespace = "com.aliernfrog.toptoast"
@@ -48,8 +48,8 @@ android {
 
 dependencies {
     implementation("androidx.core:core-ktx:$coreVersion")
-    implementation("androidx.compose.ui:ui:$composeVersion")
-    implementation("androidx.compose.material3:material3:$material3Version")
+    implementation("androidx.compose.ui:ui:$composeMaterialVersion")
+    implementation("androidx.compose.material3:material3:$composeMaterial3Version")
     implementation("androidx.savedstate:savedstate-ktx:1.2.1")
 }
 
