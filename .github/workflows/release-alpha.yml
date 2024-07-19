@@ -21,32 +21,42 @@ jobs:
           cache: gradle
 
       - name: Build with Gradle
-        run: ./gradlew assembleRelease
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > $GITHUB_WORKSPACE/key.jks
+          ./gradlew assembleRelease -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/key.jks -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.KEYSTORE_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
 
-      - name: Sign demo APK
-        id: sign_apk
-        uses: ilharp/sign-android-release@v1
+      - name: Rename demo APK
+        run: mv demo/build/outputs/apk/release/demo_release.apk toptoast_demo.apk
+
+      - name: Generate changelog
+        id: changelog
+        uses: requarks/changelog-action@v1
         with:
-          releaseDir: ./demo/build/outputs/apk/release/
-          signingKey: ${{ secrets.KEYSTORE_BASE64 }}
-          keyAlias: ${{ secrets.KEYSTORE_ALIAS }}
-          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
-          keyPassword: ${{ secrets.KEY_PASSWORD }}
-
-      - name: Rename signed APK
-        run: mv ${{steps.sign_apk.outputs.signedFile}} toptoast_demo.apk
-
-      - name: Create release
-        uses: marvinpinto/action-automatic-releases@v1.2.1
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref_name }}
+          writeToFile: false
+          excludeTypes: ci,other,style
+      
+      - name: Create Release
+        uses: ncipollo/release-action@v1.12.0
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          allowUpdates: true
           draft: false
+          makeLatest: true
           prerelease: true
-          files: |
-            toptoast_demo.apk
+          name: ${{ github.ref_name }}
+          body: ${{ steps.changelog.outputs.changes }}
+          token: ${{ github.token }}
+          artifacts: "toptoast_demo.apk"
 
       - name: Publish package
         run: ./gradlew publish
         env:
           GITHUB_PACKAGES_URL: https://maven.pkg.github.com/${{ github.repository }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: toptoast_demo
+          path: toptoast_demo.apk
