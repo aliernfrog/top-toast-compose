@@ -22,10 +22,9 @@ jobs:
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > $GITHUB_WORKSPACE/key.jks
           ./gradlew assembleRelease -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/key.jks -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.KEYSTORE_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
-          ls ./demo/build/outputs/apk/release/
 
       - name: Rename demo APK
-        run: mv demo/build/outputs/apk/release/ toptoast_demo.apk
+        run: mv demo/build/outputs/apk/release/demo_release.apk toptoast_demo.apk
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
