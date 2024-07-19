@@ -19,20 +19,13 @@ jobs:
           cache: gradle
 
       - name: Build with Gradle
-        run: ./gradlew assembleRelease
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > $GITHUB_WORKSPACE/key.jks
+          ./gradlew assembleRelease -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/key.jks -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.KEYSTORE_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
+          ls ./demo/build/outputs/apk/release/
 
-      - name: Sign demo APK
-        id: sign_apk
-        uses: ilharp/sign-android-release@v1
-        with:
-          releaseDir: ./demo/build/outputs/apk/release/
-          signingKey: ${{ secrets.KEYSTORE_BASE64 }}
-          keyAlias: ${{ secrets.KEYSTORE_ALIAS }}
-          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
-          keyPassword: ${{ secrets.KEY_PASSWORD }}
-
-      - name: Rename signed APK
-        run: mv ${{steps.sign_apk.outputs.signedFile}} toptoast_demo.apk
+      - name: Rename demo APK
+        run: mv demo/build/outputs/apk/release/ toptoast_demo.apk
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
