@@ -26,7 +26,6 @@ import androidx.savedstate.findViewTreeSavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.aliernfrog.toptoast.component.TopToast
 import com.aliernfrog.toptoast.enum.TopToastColor
-import com.aliernfrog.toptoast.enum.TopToastType
 import java.util.Timer
 import java.util.TimerTask
 import kotlin.concurrent.schedule
@@ -35,14 +34,11 @@ import kotlin.concurrent.schedule
  * State of TopToasts
  * @param composeView Compose view used for Android type toasts, can also be set later using [TopToastState.setComposeView]
  * @param appTheme App theme to be used for Android type toasts
- * @param defaultType [TopToastType] to use when not specified
  * @param allowSwipingByDefault Whether to allow swiping toasts to dismiss them by default
  */
 class TopToastState(
     private var composeView: View?,
     private var appTheme: (@Composable (content: @Composable () -> Unit) -> Unit)?,
-    @Deprecated("This is no longer needed as showAndroidToast is now a separate method. Will be removed in next releases.")
-    private val defaultType: TopToastType = TopToastType.INTERACTIVE,
     private val allowSwipingByDefault: Boolean = true,
     private val defaultAndroidToast: @Composable (text: String, icon: Painter?, iconTintColor: Color) -> Unit = { title, icon, iconTintColor ->
         TopToast(
@@ -84,121 +80,6 @@ class TopToastState(
 
     private val timer = Timer()
     private var task: TimerTask? = null
-
-    /**
-     * Shows a [TopToast].
-     * @param text Text shown in toast, can be a [String] or [Int] representing a string constant
-     * @param icon [Painter] of icon in toast, can be a [Painter], [ImageVector] or [Int] representing a drawable constant
-     * @param iconTintColor Tint color of icon in toast, can be a [Color] or [TopToastColor]
-     * @param stayMs Duration of toast in milliseconds, only for [TopToastType.INTERACTIVE]
-     * @param type [TopToastType] of toast, defaults to [defaultType]
-     * @param dismissOnClick Whether to dismiss the toast on click, only for [TopToastType.INTERACTIVE]
-     * @param onToastClick Unit to invoke on toast click, only for [TopToastType.INTERACTIVE]
-     */
-    @Deprecated(
-        message = "Use showToast(text, icon, iconTintColor, duration, swipeToDismiss, dismissOnClick, onToastClick) or showAndroidToast(text, icon, iconTintColor, duration) instead. This method will be removed in next releases.",
-        replaceWith = ReplaceWith("showToast", "showToast(text, icon, iconTintColor, duration, swipeToDismiss, dismissOnClick, onToastClick)")
-    )
-    fun showToast(
-        text: Any,
-        icon: Any? = null,
-        iconTintColor: Any = TopToastColor.PRIMARY,
-        stayMs: Long,
-        type: TopToastType,
-        dismissOnClick: Boolean? = null,
-        onToastClick: (() -> Unit)? = null
-    ) {
-        when (type) {
-            TopToastType.INTERACTIVE -> showToast(
-                text = text,
-                icon = icon,
-                iconTintColor = iconTintColor,
-                duration = stayMs,
-                dismissOnClick = dismissOnClick,
-                onToastClick = onToastClick
-            )
-            TopToastType.ANDROID -> showAndroidToast(
-                text = text,
-                icon = icon,
-                iconTintColor = iconTintColor
-            )
-        }
-    }
-
-    /**
-     * Shows a [TopToast].
-     * @param text Text shown in toast, can be a [String] or [Int] representing a string constant
-     * @param icon [Painter] of icon in toast, can be a [Painter], [ImageVector] or [Int] representing a drawable constant
-     * @param iconTintColor Tint color of icon in toast, can be a [Color] or [TopToastColor]
-     * @param type [TopToastType] of toast, defaults to [defaultType]
-     * @param dismissOnClick Whether to dismiss the toast on click, only for [TopToastType.INTERACTIVE]
-     * @param onToastClick Unit to invoke on toast click, only for [TopToastType.INTERACTIVE]
-     */
-    @Deprecated(
-        message = "Use showToast(text, icon, iconTintColor, duration, swipeToDismiss, dismissOnClick, onToastClick) or showAndroidToast(text, icon, iconTintColor, duration) instead. This method will be removed in next releases.",
-        replaceWith = ReplaceWith("showToast", "showToast(text, icon, iconTintColor, duration, swipeToDismiss, dismissOnClick, onToastClick)")
-    )
-    fun showToast(
-        text: Any,
-        icon: Any? = null,
-        iconTintColor: Any = TopToastColor.PRIMARY,
-        type: TopToastType,
-        dismissOnClick: Boolean? = null,
-        onToastClick: (() -> Unit)? = null
-    ) {
-        when (type) {
-            TopToastType.INTERACTIVE -> showToast(
-                text = text,
-                icon = icon,
-                iconTintColor = iconTintColor,
-                dismissOnClick = dismissOnClick,
-                onToastClick = onToastClick
-            )
-            TopToastType.ANDROID -> showAndroidToast(
-                text = text,
-                icon = icon,
-                iconTintColor = iconTintColor
-            )
-        }
-    }
-
-    /**
-     * Shows a [TopToast].
-     * @param text Text shown in toast, can be a [String] or [Int] representing a string constant
-     * @param icon [Painter] of icon in toast, can be a [Painter], [ImageVector] or [Int] representing a drawable constant
-     * @param iconTintColor Tint color of icon in toast, can be a [Color] or [TopToastColor]
-     * @param stayMs Duration of toast in milliseconds, only for [TopToastType.INTERACTIVE]
-     * @param dismissOnClick Whether to dismiss the toast on click, only for [TopToastType.INTERACTIVE]
-     * @param onToastClick Unit to invoke on toast click, only for [TopToastType.INTERACTIVE]
-     */
-    @Deprecated(
-        message = "Use showToast(text, icon, iconTintColor, duration, swipeToDismiss, dismissOnClick, onToastClick) or showAndroidToast(text, icon, iconTintColor, duration) instead. This method will be removed in next releases.",
-        replaceWith = ReplaceWith("showToast", "showToast(text, icon, iconTintColor, duration, swipeToDismiss, dismissOnClick, onToastClick)")
-    )
-    fun showToast(
-        text: Any,
-        icon: Any? = null,
-        iconTintColor: Any = TopToastColor.PRIMARY,
-        stayMs: Long,
-        dismissOnClick: Boolean? = null,
-        onToastClick: (() -> Unit)? = null
-    ) {
-        when (defaultType) {
-            TopToastType.INTERACTIVE -> showToast(
-                text = text,
-                icon = icon,
-                iconTintColor = iconTintColor,
-                duration = stayMs,
-                dismissOnClick = dismissOnClick,
-                onToastClick = onToastClick
-            )
-            TopToastType.ANDROID -> showAndroidToast(
-                text = text,
-                icon = icon,
-                iconTintColor = iconTintColor
-            )
-        }
-    }
 
     /**
      * Shows a [TopToast].

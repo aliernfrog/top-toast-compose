@@ -36,7 +36,6 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
@@ -54,6 +53,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.contentColorFor
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -252,6 +252,7 @@ class MainActivity : ComponentActivity() {
                             },
                             singleLine = true,
                             keyboardOptions = KeyboardOptions.Default.copy(
+                                autoCorrectEnabled = null,
                                 keyboardType = KeyboardType.Number
                             ),
                             modifier = Modifier.fillMaxWidth()
@@ -304,7 +305,7 @@ class MainActivity : ComponentActivity() {
                                     .width(50.dp)
                                     .clickable(
                                         interactionSource = remember { MutableInteractionSource() },
-                                        indication = rememberRipple(bounded = false),
+                                        indication = ripple(bounded = false),
                                         onClick = onSelect
                                     )
                             ) {
@@ -340,7 +341,7 @@ class MainActivity : ComponentActivity() {
                                     .fillMaxHeight()
                                     .clickable(
                                         interactionSource = remember { MutableInteractionSource() },
-                                        indication = rememberRipple(bounded = false),
+                                        indication = ripple(bounded = false),
                                         onClick = onSelect
                                     )
                                     .size(45.dp)
