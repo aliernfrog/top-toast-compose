@@ -1,13 +1,13 @@
 plugins {
-    id("com.android.application") version "8.2.2" apply false
-    id("com.android.library") version "8.2.2" apply false
-    id("org.jetbrains.kotlin.android") version "1.9.22" apply false
+    id("com.android.application") version "8.5.2" apply false
+    id("com.android.library") version "8.5.2" apply false
+    id("org.jetbrains.kotlin.android") version "1.9.25" apply false
 }
 
-val libraryVersionName by extra { "2.0.1" }
-val libraryVersionCode by extra { 20110 }
+val libraryVersionName by extra { "2.1.0" }
+val libraryVersionCode by extra { 21010 }
 
-val coreVersion by extra { "1.12.0" }
-val composeCompilerVersion by extra { "1.5.8" }
-val composeVersion by extra { "1.6.0" }
-val material3Version by extra { "1.2.0" }
+val coreVersion by extra { "1.13.1" }
+val composeCompilerVersion by extra { "1.5.15" }
+val composeMaterialVersion by extra { "1.7.0" }
+val composeMaterial3Version by extra { "1.3.0" }
