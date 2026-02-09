@@ -16,6 +16,7 @@ import com.aliernfrog.toptoastdemo.MainActivity
 
 val supportsMaterialYou = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @SuppressLint("NewApi")
 @Composable
 fun TopToastComposeTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
@@ -23,7 +24,7 @@ fun TopToastComposeTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @C
         supportsMaterialYou && darkTheme -> dynamicDarkColorScheme(LocalContext.current)
         supportsMaterialYou && !darkTheme -> dynamicLightColorScheme(LocalContext.current)
         darkTheme -> darkColorScheme()
-        else -> lightColorScheme()
+        else -> expressiveLightColorScheme()
     }
 
     val view = LocalView.current
@@ -35,7 +36,10 @@ fun TopToastComposeTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @C
 
         WindowCompat.setDecorFitsSystemWindows(activity.window, false)
 
+        @Suppress("DEPRECATION")
         activity.window.statusBarColor = transparentColor
+
+        @Suppress("DEPRECATION")
         activity.window.navigationBarColor = transparentColor
 
         if (Build.VERSION.SDK_INT >= 29) {

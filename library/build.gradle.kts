@@ -1,21 +1,19 @@
 import java.net.URI
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
-    id("maven-publish")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+    `maven-publish`
 }
 
 val libraryVersionName: String by rootProject.extra
 
-val coreVersion: String by rootProject.extra
-val composeCompilerVersion: String by rootProject.extra
-val composeMaterialVersion: String by rootProject.extra
-val composeMaterial3Version: String by rootProject.extra
-
 android {
     namespace = "com.aliernfrog.toptoast"
-    compileSdk = 34
+    compileSdk = 36
+    buildToolsVersion = "36.1.0"
 
     defaultConfig {
         minSdk = 21
@@ -29,55 +27,57 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 
-    kotlinOptions {
-        jvmTarget = "1.8"
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
+        }
     }
 
     buildFeatures {
         compose = true
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = composeCompilerVersion
+    publishing {
+        singleVariant("release")
     }
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:$coreVersion")
-    implementation("androidx.compose.ui:ui:$composeMaterialVersion")
-    implementation("androidx.compose.material3:material3:$composeMaterial3Version")
-    implementation("androidx.savedstate:savedstate-ktx:1.2.1")
+    implementation(libs.androidx.ktx)
+    implementation(libs.androidx.savedstate.ktx)
+
+    implementation(libs.compose.ui)
+    implementation(libs.compose.material3)
 }
 
-publishing {
-    publications {
-        register<MavenPublication>("release") {
-            groupId = "aliernfrog"
-            artifactId = "top-toast-compose"
-            version = libraryVersionName
-
-            afterEvaluate {
+afterEvaluate {
+    publishing {
+        publications {
+            register<MavenPublication>("release") {
+                groupId = "aliernfrog"
+                artifactId = "top-toast-compose"
+                version = libraryVersionName
                 from(components["release"])
             }
         }
-    }
 
-    val githubPackagesURL = System.getenv("GITHUB_PACKAGES_URL")
+        val githubPackagesURL = System.getenv("GITHUB_PACKAGES_URL")
 
-    if (
-        !System.getenv("GITHUB_TOKEN").isNullOrEmpty()
-        && !githubPackagesURL.isNullOrEmpty()
-    ) repositories {
-        maven {
-            name = "GitHubPackages"
-            url = URI(githubPackagesURL)
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
+        if (
+            !System.getenv("GITHUB_TOKEN").isNullOrEmpty()
+            && !githubPackagesURL.isNullOrEmpty()
+        ) repositories {
+            maven {
+                name = "GitHubPackages"
+                url = URI(githubPackagesURL)
+                credentials {
+                    username = System.getenv("GITHUB_ACTOR")
+                    password = System.getenv("GITHUB_TOKEN")
+                }
             }
         }
     }

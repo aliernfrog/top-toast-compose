@@ -1,0 +1,29 @@
+[versions]
+android-plugin = "8.13.2"
+kotlin-plugin = "2.3.0"
+
+androidx-activity = "1.12.0-alpha02"
+androidx-ktx = "1.16.0"
+androidx-lifecycle = "2.9.0"
+androidx-savedstate = "1.3.0"
+
+compose = "1.8.3"
+compose-material-icons = "1.7.8"
+compose-material3 = "1.4.0-alpha18"
+
+[libraries]
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity" }
+androidx-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-ktx" }
+androidx-lifecycle-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
+androidx-savedstate-ktx = { group = "androidx.savedstate", name = "savedstate-ktx", version.ref = "androidx-savedstate" }
+
+compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "compose" }
+compose-material = { group = "androidx.compose.material", name = "material", version.ref = "compose" }
+compose-material-icons = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "compose-material-icons" }
+compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "compose-material3" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "android-plugin" }
+android-library = { id = "com.android.library", version.ref = "android-plugin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin-plugin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin-plugin" }
