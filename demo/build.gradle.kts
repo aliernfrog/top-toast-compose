@@ -6,9 +6,6 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 }
 
-val libraryVersionName: String by rootProject.extra
-val libraryVersionCode: Int by rootProject.extra
-
 android {
     namespace = "com.aliernfrog.toptoastdemo"
     compileSdk = 36
@@ -18,8 +15,8 @@ android {
         applicationId = "com.aliernfrog.toptoastdemo"
         minSdk = 21
         targetSdk = 36
-        versionCode = libraryVersionCode
-        versionName = libraryVersionName
+        versionCode = libs.versions.versionCode.get().toInt()
+        versionName = libs.versions.versionName.get()
         vectorDrawables { useSupportLibrary = true }
     }
 

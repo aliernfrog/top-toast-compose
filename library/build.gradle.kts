@@ -8,8 +8,6 @@ plugins {
     `maven-publish`
 }
 
-val libraryVersionName: String by rootProject.extra
-
 android {
     namespace = "com.aliernfrog.toptoast"
     compileSdk = 36
@@ -60,7 +58,7 @@ afterEvaluate {
             register<MavenPublication>("release") {
                 groupId = "aliernfrog"
                 artifactId = "top-toast-compose"
-                version = libraryVersionName
+                version = libs.versions.versionName.get()
                 from(components["release"])
             }
         }
