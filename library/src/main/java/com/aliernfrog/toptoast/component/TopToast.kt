@@ -12,7 +12,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.ripple
-import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,8 +22,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aliernfrog.toptoast.state.TopToastState
-import com.aliernfrog.toptoast.util.TopToastElevation
-import com.aliernfrog.toptoast.util.TopToastShape
+import com.aliernfrog.toptoast.util.TopToastDefaults
 
 /**
  * Top toast
@@ -38,15 +36,21 @@ fun TopToast(
     text: String = state?.resolveText() ?: "",
     icon: Painter? = state?.resolveIcon(),
     iconTintColor: Color = state?.resolveIconTintColor() ?: MaterialTheme.colorScheme.primary,
-    containerColor: Color = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
-    textColor: Color = MaterialTheme.colorScheme.contentColorFor(containerColor),
+    containerColor: Color = TopToastDefaults.containerColor,
+    textColor: Color = containerColor.let {
+        if (it == TopToastDefaults.containerColor) MaterialTheme.colorScheme.onSurface
+        else MaterialTheme.colorScheme.contentColorFor(it)
+    },
     onClick: (() -> Unit)? = state?.onClick
 ) {
     Row(
         modifier = modifier
-            .padding(TopToastElevation+1.4.dp) // avoid shadow getting cropped
-            .shadow(elevation = TopToastElevation, shape = TopToastShape)
-            .clip(TopToastShape)
+            .padding(TopToastDefaults.elevation+1.4.dp) // avoid shadow getting cropped
+            .shadow(
+                elevation = TopToastDefaults.elevation,
+                shape = TopToastDefaults.shape
+            )
+            .clip(TopToastDefaults.shape)
             .background(containerColor)
             .animateContentSize()
             .run { onClick?.let {

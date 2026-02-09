@@ -1,7 +1,25 @@
 package com.aliernfrog.toptoast.util
 
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.surfaceColorAtElevation
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 
-val TopToastShape = RoundedCornerShape(24.dp)
-val TopToastElevation = 3.dp
+object TopToastDefaults {
+    val shape = RoundedCornerShape(24.dp)
+
+    val elevation = 4.dp
+
+    @get:Composable
+    val containerColor
+        get() = MaterialTheme.colorScheme.surfaceColorAtElevation(elevation)
+}
+
+@Suppress("unused")
+@Deprecated("Use TopToastDefaults.shape instead", ReplaceWith("TopToastDefaults.shape"))
+val TopToastShape = TopToastDefaults.shape
+
+@Suppress("unused")
+@Deprecated("Use TopToastDefaults.elevation instead", ReplaceWith("TopToastDefaults.elevation"))
+val TopToastElevation = TopToastDefaults.elevation
