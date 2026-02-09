@@ -77,7 +77,7 @@ import com.aliernfrog.toptoast.component.TopToastHost
 import com.aliernfrog.toptoast.enum.TopToastColor
 import com.aliernfrog.toptoast.state.TopToastState
 import com.aliernfrog.toptoastdemo.enum.ToastMethod
-import com.aliernfrog.toptoastdemo.ui.component.SegmentedButtons
+import com.aliernfrog.toptoastdemo.ui.component.SingleChoiceConnectedButtonGroup
 import com.aliernfrog.toptoastdemo.ui.component.form.FormSection
 import com.aliernfrog.toptoastdemo.ui.theme.TopToastComposeTheme
 
@@ -208,8 +208,8 @@ class MainActivity : ComponentActivity() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 FormSection(title = "Method") {
-                    SegmentedButtons(
-                        options = ToastMethod.entries.map { it.label },
+                    SingleChoiceConnectedButtonGroup(
+                        choices = ToastMethod.entries.map { it.label },
                         selectedIndex = selectedToastMethod.ordinal,
                         onSelect = { selectedToastMethod = ToastMethod.entries[it] },
                         modifier = Modifier
@@ -256,8 +256,8 @@ class MainActivity : ComponentActivity() {
                                 keyboardType = KeyboardType.Number
                             ),
                             modifier = Modifier.fillMaxWidth()
-                        ) else SegmentedButtons(
-                            options = listOf("Toast.LENGTH_SHORT", "Toast.LENGTH_LONG"),
+                        ) else SingleChoiceConnectedButtonGroup(
+                            choices = listOf("LENGTH_SHORT", "LENGTH_LONG"),
                             selectedIndex = toastDuration ?: selectedToastMethod.defaultDuration,
                             onSelect = { toastDuration = it },
                             modifier = Modifier.fillMaxWidth()
