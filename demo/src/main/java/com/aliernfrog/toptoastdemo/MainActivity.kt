@@ -121,7 +121,7 @@ class MainActivity : ComponentActivity() {
         var toastDuration by rememberSaveable {
             mutableStateOf<Int?>(null)
         }
-        var toastIcon by rememberSaveable {
+        var toastIcon by remember {
             mutableStateOf<ImageVector?>(null)
         }
         var showDialogAfterToast by rememberSaveable {
