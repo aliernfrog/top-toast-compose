@@ -2,7 +2,6 @@ package com.aliernfrog.toptoast.util
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 
@@ -13,7 +12,7 @@ object TopToastDefaults {
 
     @get:Composable
     val containerColor
-        get() = MaterialTheme.colorScheme.surfaceColorAtElevation(elevation)
+        get() = MaterialTheme.colorScheme.surfaceContainerHighest
 }
 
 @Suppress("unused")
