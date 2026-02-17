@@ -4,6 +4,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
@@ -41,13 +43,17 @@ fun TopToastHost(
             initialOffsetY = { fullHeight -> -fullHeight },
             animationSpec = tween(durationMillis = 500)
         ) + fadeIn(
-            animationSpec = tween(delayMillis = 250, durationMillis = 250)
+            animationSpec = tween(delayMillis = 200, durationMillis = 300)
+        ) + scaleIn(
+            animationSpec = tween(durationMillis = 500)
         ),
         exit = slideOutVertically(
             targetOffsetY = { fullHeight -> -fullHeight },
             animationSpec = tween(durationMillis = 500)
         ) + fadeOut(
-            animationSpec = tween(durationMillis = 150)
+            animationSpec = tween(durationMillis = 200)
+        ) + scaleOut(
+            animationSpec = tween(durationMillis = 500)
         )
     ) {
         Box(
