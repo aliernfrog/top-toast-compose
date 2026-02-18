@@ -1,6 +1,6 @@
 [versions]
-versionName = "2.2.0-alpha02"
-versionCode = "22002"
+versionName = "2.2.0-alpha03"
+versionCode = "22003"
 
 android-plugin = "9.0.1"
 kotlin-plugin = "2.3.10"
