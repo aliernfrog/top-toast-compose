@@ -2,7 +2,6 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 }
 
@@ -13,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.aliernfrog.toptoastdemo"
-        minSdk = 21
+        minSdk = 23
         targetSdk = 36
         versionCode = libs.versions.versionCode.get().toInt()
         versionName = libs.versions.versionName.get()
@@ -33,12 +32,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
-    kotlin {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
-        }
-    }
-
     buildFeatures {
         buildConfig = true
         compose = true
@@ -48,6 +41,12 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_11)
     }
 }
 

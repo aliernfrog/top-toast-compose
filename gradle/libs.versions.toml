@@ -2,17 +2,17 @@
 versionName = "2.2.0-alpha02"
 versionCode = "22002"
 
-android-plugin = "8.13.2"
-kotlin-plugin = "2.3.0"
+android-plugin = "9.0.1"
+kotlin-plugin = "2.3.10"
 
-androidx-activity = "1.12.0-alpha02"
-androidx-ktx = "1.16.0"
-androidx-lifecycle = "2.9.0"
-androidx-savedstate = "1.3.0"
+androidx-activity = "1.12.4"
+androidx-ktx = "1.17.0"
+androidx-lifecycle = "2.10.0"
+androidx-savedstate = "1.4.0"
 
-compose = "1.8.3"
+compose = "1.10.3"
 compose-material-icons = "1.7.8"
-compose-material3 = "1.4.0-alpha18"
+compose-material3 = "1.5.0-alpha14"
 
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity" }

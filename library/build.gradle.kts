@@ -3,7 +3,6 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     `maven-publish`
 }
@@ -14,7 +13,7 @@ android {
     buildToolsVersion = "36.1.0"
 
     defaultConfig {
-        minSdk = 21
+        minSdk = 23
     }
 
     buildTypes {
@@ -29,18 +28,18 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
-    kotlin {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
-        }
-    }
-
     buildFeatures {
         compose = true
     }
 
     publishing {
         singleVariant("release")
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_11)
     }
 }
 
