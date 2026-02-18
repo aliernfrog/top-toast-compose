@@ -31,6 +31,7 @@ fun FormSection(
         if (title != null) Text(
             text = title,
             color = titleColor,
+            style = MaterialTheme.typography.labelLarge,
             modifier = Modifier.padding(
                 horizontal = 16.dp,
                 vertical = 8.dp

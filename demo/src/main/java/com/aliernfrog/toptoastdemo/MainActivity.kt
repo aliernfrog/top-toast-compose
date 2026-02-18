@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,7 +28,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -71,13 +71,12 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.core.view.WindowCompat
 import com.aliernfrog.toptoast.component.TopToast
 import com.aliernfrog.toptoast.component.TopToastHost
 import com.aliernfrog.toptoast.enum.TopToastColor
 import com.aliernfrog.toptoast.state.TopToastState
 import com.aliernfrog.toptoastdemo.enum.ToastMethod
-import com.aliernfrog.toptoastdemo.ui.component.SegmentedButtons
+import com.aliernfrog.toptoastdemo.ui.component.SingleChoiceConnectedButtonGroup
 import com.aliernfrog.toptoastdemo.ui.component.form.FormSection
 import com.aliernfrog.toptoastdemo.ui.theme.TopToastComposeTheme
 
@@ -89,7 +88,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         topToastState = TopToastState(
             composeView = null,
             appTheme = {
@@ -97,6 +96,7 @@ class MainActivity : ComponentActivity() {
             }
         )
         topToastState.setComposeView(window.decorView)
+
         setContent {
             TopToastComposeTheme {
                 AppContent()
@@ -121,7 +121,7 @@ class MainActivity : ComponentActivity() {
         var toastDuration by rememberSaveable {
             mutableStateOf<Int?>(null)
         }
-        var toastIcon by rememberSaveable {
+        var toastIcon by remember {
             mutableStateOf<ImageVector?>(null)
         }
         var showDialogAfterToast by rememberSaveable {
@@ -192,11 +192,12 @@ class MainActivity : ComponentActivity() {
                         )
                         if (showDialogAfterToast) dialogShown = true
                     },
-                    shape = RoundedCornerShape(16.dp)
+                    modifier = Modifier.navigationBarsPadding()
                 ) {
                     Icon(Icons.Default.Check, contentDescription = null)
                 }
             },
+            contentWindowInsets = WindowInsets(0, 0, 0, 0),
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
         ) { paddingValues ->
             Column(
@@ -208,8 +209,8 @@ class MainActivity : ComponentActivity() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 FormSection(title = "Method") {
-                    SegmentedButtons(
-                        options = ToastMethod.entries.map { it.label },
+                    SingleChoiceConnectedButtonGroup(
+                        choices = ToastMethod.entries.map { it.label },
                         selectedIndex = selectedToastMethod.ordinal,
                         onSelect = { selectedToastMethod = ToastMethod.entries[it] },
                         modifier = Modifier
@@ -256,8 +257,8 @@ class MainActivity : ComponentActivity() {
                                 keyboardType = KeyboardType.Number
                             ),
                             modifier = Modifier.fillMaxWidth()
-                        ) else SegmentedButtons(
-                            options = listOf("Toast.LENGTH_SHORT", "Toast.LENGTH_LONG"),
+                        ) else SingleChoiceConnectedButtonGroup(
+                            choices = listOf("LENGTH_SHORT", "LENGTH_LONG"),
                             selectedIndex = toastDuration ?: selectedToastMethod.defaultDuration,
                             onSelect = { toastDuration = it },
                             modifier = Modifier.fillMaxWidth()
