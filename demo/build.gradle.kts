@@ -1,26 +1,21 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.compose)
 }
-
-val libraryVersionName: String by rootProject.extra
-val libraryVersionCode: Int by rootProject.extra
-
-val coreVersion: String by rootProject.extra
-val composeCompilerVersion: String by rootProject.extra
-val composeMaterialVersion: String by rootProject.extra
-val composeMaterial3Version: String by rootProject.extra
 
 android {
     namespace = "com.aliernfrog.toptoastdemo"
-    compileSdk = 34
+    compileSdk = 36
+    buildToolsVersion = "36.1.0"
 
     defaultConfig {
         applicationId = "com.aliernfrog.toptoastdemo"
-        minSdk = 21
-        targetSdk = 34
-        versionCode = libraryVersionCode
-        versionName = libraryVersionName
+        minSdk = 23
+        targetSdk = 36
+        versionCode = libs.versions.versionCode.get().toInt()
+        versionName = libs.versions.versionName.get()
         vectorDrawables { useSupportLibrary = true }
     }
 
@@ -33,21 +28,13 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = "1.8"
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 
     buildFeatures {
-        compose = true
         buildConfig = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = composeCompilerVersion
+        compose = true
     }
 
     packaging {
@@ -57,12 +44,21 @@ android {
     }
 }
 
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_11)
+    }
+}
+
 dependencies {
-    implementation("androidx.core:core-ktx:$coreVersion")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.5")
-    implementation("androidx.activity:activity-compose:1.9.2")
-    implementation("androidx.compose.ui:ui:$composeMaterialVersion")
-    implementation("androidx.compose.material:material:$composeMaterialVersion")
-    implementation("androidx.compose.material3:material3:$composeMaterial3Version")
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.ktx)
+    implementation(libs.androidx.lifecycle.ktx)
+
+    implementation(libs.compose.ui)
+    implementation(libs.compose.material)
+    implementation(libs.compose.material.icons)
+    implementation(libs.compose.material3)
+
     implementation(project(":library"))
 }
