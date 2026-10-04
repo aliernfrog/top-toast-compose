@@ -44,7 +44,7 @@ fun TopToast(
     onClick: (() -> Unit)? = state?.onClick
 ) {
     Row(
-        modifier = modifier
+        modifier = Modifier
             .padding(TopToastDefaults.elevation+1.4.dp) // avoid shadow getting cropped
             .shadow(
                 elevation = TopToastDefaults.elevation,
@@ -52,6 +52,7 @@ fun TopToast(
             )
             .clip(TopToastDefaults.shape)
             .background(containerColor)
+            .then(modifier)
             .animateContentSize()
             .run { onClick?.let {
                 clickable(
